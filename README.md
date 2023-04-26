@@ -1,10 +1,24 @@
-# Nuxt 3 Minimal Starter
+## YouTube Music Clone
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+### [Live Preview](https://yt-music-clone.gwyndev.com/)
+
+A YouTube Music clone made by Nuxt.js and Tailwind CSS. Currently in development, not much to see here yet.
 
 ## Setup
 
-Make sure to install the dependencies:
+Clone the repository
+
+```bash
+git clone https://github.com/MehmetAliKOCAL/YTMusicClone
+```
+
+Open the folder you've cloned
+
+```bash
+cd YTMusicClone
+```
+
+Make sure to install the dependencies
 
 ```bash
 # yarn
@@ -38,5 +52,7 @@ Locally preview production build:
 ```bash
 npm run preview
 ```
+
+## Production
 
 Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
