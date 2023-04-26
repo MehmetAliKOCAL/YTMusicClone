@@ -123,9 +123,9 @@ onBeforeMount(() => {
     ]"
     class="text-ytgray px-4 py-1 sticky top-0 transition-colors duration-300"
   >
-    <nav class="flex justify-between items-center tracking-tighter">
+    <nav class="flex justify-between items-center py-1">
       <NuxtLink to="/"><IconsLogo /></NuxtLink>
-      <div class="flex justify-center items-center">
+      <div class="flex justify-center items-center ml-2">
         <div class="max-ytmd:hidden">
           <NuxtLink
             v-for="tab in headerTabs"
@@ -133,7 +133,7 @@ onBeforeMount(() => {
             :to="tab.link"
             :class="{
               'text-white': useRoute().path === tab.link,
-              'mr-10': tab.text !== 'Upgrade',
+              'mr-10 ytlg:mr-12': tab.text !== 'Upgrade',
             }"
             class="py-3 text-xl font-medium transition-colors duration-200 font-robotoExt hover:text-white"
             >{{ tab.text }}</NuxtLink
@@ -164,7 +164,7 @@ onBeforeMount(() => {
           <NuxtLink
             @mouseenter="elementThatBeingHovered = 'upgrade'"
             @mouseleave="elementThatBeingHovered = ''"
-            class="py-3"
+            class="ytsm:mr-1 py-3"
             to="/upgrade"
             ><IconsUpgrade :elementThatBeingHovered="elementThatBeingHovered" />
           </NuxtLink>
@@ -177,7 +177,7 @@ onBeforeMount(() => {
           <IconsSearch :elementThatBeingHovered="elementThatBeingHovered" />
           <p
             :class="{ 'text-white': elementThatBeingHovered === 'search' }"
-            class="text-xl font-medium font-robotoExt max-ytlg:hidden"
+            class="text-xl font-medium font-robotoExt max-ytlg:hidden ml-1"
           >
             Search
           </p>
@@ -185,15 +185,12 @@ onBeforeMount(() => {
       </div>
       <div class="flex space-x-5 justify-center items-center">
         <IconsCast />
-        <button
-          @click="showSettings = !showSettings"
-          class="border border-[#383838] rounded-full"
-        >
+        <button @click="showSettings = !showSettings">
           <img
             src="/images/pfp.jpg"
             alt="user profile picture"
             width="26"
-            class="rounded-full"
+            class="ml-1 border border-[#383838] rounded-full"
           />
         </button>
       </div>

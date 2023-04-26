@@ -9,7 +9,7 @@ const props = defineProps({
 </script>
 
 <template>
-  <div class="w-12 p-3">
+  <div class="w-12 p-3 ytmd:ml-2">
     <svg
       class="transition-colors duration-200"
       :fill="[

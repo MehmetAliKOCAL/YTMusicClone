@@ -14,6 +14,9 @@ export default <Partial<Config>>{
         ytmd:'935px',
         ytlg:'1150px',
         ytxl:'1350px'
+      },
+      spacing:{
+        '13':'3.25rem'
       }
     }
   }

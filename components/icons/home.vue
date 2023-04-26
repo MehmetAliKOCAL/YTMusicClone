@@ -11,9 +11,8 @@ const props = defineProps({
 <template>
   <div class="w-6">
     <svg
-      id="home"
-      class="transition-all duration-200 filter invert-[50%] hover:invert"
-      :class="{ 'invert-[100%]': useRoute().path === '/' }"
+      class="transition-all duration-200 filter hover:invert"
+      :class="[useRoute().path == '/' ? 'invert-[100%]' : 'invert-[50%]']"
       viewBox="0 0 24 24"
     >
       <g>
