@@ -14,7 +14,7 @@ const props = defineProps({
 function dynamicComponent() {
   const iconName = props.iconName;
   return defineAsyncComponent(() =>
-    import(`@/components/Icons/${iconName}.vue`)
+    import(`@/components/icons/${iconName}.vue`)
   );
 }
 </script>
