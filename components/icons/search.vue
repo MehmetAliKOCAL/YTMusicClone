@@ -2,14 +2,19 @@
 const props = defineProps({
   elementThatBeingHovered: {
     type: String,
-    required: true,
+    required: false,
+    default: "",
+  },
+  wrapperElementClassList: {
+    type: String,
+    required: false,
     default: "",
   },
 });
 </script>
 
 <template>
-  <div class="w-12 p-3 ytmd:ml-2">
+  <div :class="props.wrapperElementClassList">
     <svg
       class="transition-colors duration-200"
       :fill="[

@@ -13,7 +13,8 @@ export default <Partial<Config>>{
         ytsm:'615px',
         ytmd:'935px',
         ytlg:'1150px',
-        ytxl:'1350px'
+        ytxl:'1365px',
+        yt2xl:'1580px'
       },
       spacing:{
         '13':'3.25rem'

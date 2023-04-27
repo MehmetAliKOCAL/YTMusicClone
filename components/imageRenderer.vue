@@ -9,12 +9,12 @@ const props = defineProps({
     required: false,
     default: "dynamically rendered image",
   },
-  wrapperClassList: {
+  wrapperElementClassList: {
     type: String,
     required: false,
     default: "",
   },
-  imgClassList: {
+  imgElementClassList: {
     type: String,
     required: false,
     default: "",
@@ -22,7 +22,7 @@ const props = defineProps({
 });
 </script>
 <template>
-  <div :class="props.wrapperClassList">
-    <img :src="props.src" :alt="props.alt" :class="props.imgClassList" />
+  <div :class="props.wrapperElementClassList">
+    <img :src="props.src" :alt="props.alt" :class="props.imgElementClassList" />
   </div>
 </template>
