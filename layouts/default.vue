@@ -1,10 +1,10 @@
 <script setup>
-let randomBg = Math.ceil(Math.random() * 6);
+let randomBg = Math.ceil(Math.random() * 7);
 let previousBg = [randomBg, randomBg, randomBg];
 
 watch(useRoute(), () => {
   function changeBgImage() {
-    randomBg = Math.ceil(Math.random() * 6);
+    randomBg = Math.ceil(Math.random() * 7);
     if (previousBg.includes(randomBg)) {
       changeBgImage();
     } else {

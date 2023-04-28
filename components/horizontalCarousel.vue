@@ -1,8 +1,12 @@
 <script setup>
 import { useScroll, useElementSize } from "@vueuse/core";
+import { OnClickOutside } from "@vueuse/components";
 
+const showSongSettings = ref(false);
+const songSettingsMenu = ref(null);
 const carousel = ref(null);
 const carouselWrapper = ref(null);
+
 const { width: carouselWrapperWidth } = useElementSize(carouselWrapper);
 const { x: carouselScrollValue } = useScroll(carousel, { behavior: "smooth" });
 
@@ -28,6 +32,39 @@ const props = defineProps({
     default: [],
   },
 });
+
+const songSettings = [
+  {
+    text: "Start radion",
+    link: "/",
+    icon: "startRadio",
+  },
+  {
+    text: "Play next",
+    link: "/",
+    icon: "playNext",
+  },
+  {
+    text: "Add to queue",
+    link: "/",
+    icon: "addToQueue",
+  },
+  {
+    text: "Remove from liked songs",
+    link: "/",
+    icon: "removeFromLikedSongs",
+  },
+  {
+    text: "Add to playlist",
+    link: "/",
+    icon: "addToPlaylist",
+  },
+  {
+    text: "Share",
+    link: "/",
+    icon: "share",
+  },
+];
 </script>
 
 <template>
@@ -123,6 +160,7 @@ const props = defineProps({
               ]"
             >
               <IconsSettingsDots
+                @click="showSongSettings = !showSongSettings"
                 wrapperElementClassList="w-10 invert-[100%] p-2 top-2 right-2 absolute rounded-full hover:bg-black/10 transition-colors duration-300"
               />
               <IconsPlay
@@ -179,6 +217,28 @@ const props = defineProps({
         </div>
       </div>
     </div>
+
+    <OnClickOutside @trigger="showSongSettings = false">
+      <div
+        ref="songSettingsMenu"
+        class="py-4 z-10 -mt-52 absolute bg-[#202120] border border-white/10 rounded-sm transition-all duration-200"
+        :class="[
+          showSongSettings ? 'opacity-100 visible' : 'opacity-0 invisible',
+        ]"
+      >
+        <NuxtLink
+          v-for="item in songSettings"
+          :key="item"
+          :to="item.link"
+          class="flex items-center hover:bg-white/5"
+        >
+          <div class="w-14 py-3 px-4">
+            <IconRenderer :iconName="item.icon" />
+          </div>
+          <p class="text-sm pr-8">{{ item.text }}</p>
+        </NuxtLink>
+      </div></OnClickOutside
+    >
   </div>
 </template>
 <style scoped>

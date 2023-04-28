@@ -19,6 +19,7 @@
     "vue": "latest"
   },
   "dependencies": {
-    "@pinia/nuxt": "^0.4.9"
+    "@pinia/nuxt": "^0.4.9",
+    "@vueuse/components": "^10.1.0"
   }
 }

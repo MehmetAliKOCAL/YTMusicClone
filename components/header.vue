@@ -1,4 +1,6 @@
 <script setup>
+import { OnClickOutside } from "@vueuse/components";
+
 const elementThatBeingHovered = ref("");
 const showSettings = ref(false);
 const showSearch = ref(false);
@@ -184,7 +186,6 @@ function autoFocusToSearchBar(delay) {
           @mouseleave="elementThatBeingHovered = ''"
           @click="
             showSearch = !showSearch;
-            showSettings = false;
             autoFocusToSearchBar(100);
           "
           class="flex justify-center items-center ml-5"
@@ -203,12 +204,7 @@ function autoFocusToSearchBar(delay) {
       </div>
       <div class="flex justify-center items-center">
         <IconsCast class="max-ytsm:hidden mr-6" />
-        <button
-          @click="
-            showSettings = !showSettings;
-            showSearch = false;
-          "
-        >
+        <button @click="showSettings = !showSettings">
           <img
             src="/images/pfp.jpg"
             alt="user profile picture"
@@ -220,134 +216,131 @@ function autoFocusToSearchBar(delay) {
       </div>
     </nav>
 
-    <div
-      :class="[showSettings ? 'opacity-100 visible' : 'opacity-0 invisible']"
-      class="transition-all duration-200"
-    >
+    <OnClickOutside @trigger="showSettings = false">
       <div
-        id="settingsMenu"
-        class="absolute w-[297px] bg-[#282828] text-white rounded-xl overflow-hidden"
+        :class="[showSettings ? 'opacity-100 visible' : 'opacity-0 invisible']"
+        class="transition-all duration-200"
       >
-        <div class="p-4 flex space-x-4 border-b border-[#383838]">
-          <img
-            src="/images/pfp.jpg"
-            alt="user profile picture"
-            width="40"
-            height="40"
-            class="rounded-full max-h-10 max-w-10"
-          />
-          <div class="cursor-default">
-            <p class="leading-5">GwynDev</p>
-            <p class="mb-1">@TearsOfaPessimist</p>
-            <NuxtLink to="/" class="text-[#3EA6FF] text-sm"
-              >Manage your Google Account</NuxtLink
-            >
-          </div>
-        </div>
         <div
-          id="settingsMenuScrollBox"
-          class="overflow-auto text-sm scrollbarStyle"
+          id="settingsMenu"
+          class="absolute w-[297px] bg-[#282828] text-white rounded-xl overflow-hidden"
         >
-          <div class="py-2 border-b border-[#383838]">
-            <NuxtLink
-              class="py-2 flex items-center hover:bg-white/10"
-              :class="{
-                'justify-between ': settingsMenuTabs.indexOf(tab) === 2,
-              }"
-              v-for="tab in settingsMenuTabs.filter((item) => {
-                return settingsMenuTabs.indexOf(item) < 4;
-              })"
-              :key="tab.text"
-              :to="tab.link"
-            >
-              <div class="flex items-center">
-                <div class="px-4">
+          <div class="p-4 flex space-x-4 border-b border-[#383838]">
+            <img
+              src="/images/pfp.jpg"
+              alt="user profile picture"
+              width="40"
+              height="40"
+              class="rounded-full max-h-10 max-w-10"
+            />
+            <div class="cursor-default">
+              <p class="leading-5">GwynDev</p>
+              <p class="mb-1">@TearsOfaPessimist</p>
+              <NuxtLink to="/" class="text-[#3EA6FF] text-sm"
+                >Manage your Google Account</NuxtLink
+              >
+            </div>
+          </div>
+          <div
+            id="settingsMenuScrollBox"
+            class="overflow-auto text-sm scrollbarStyle"
+          >
+            <div class="py-2 border-b border-[#383838]">
+              <NuxtLink
+                class="py-2 flex items-center hover:bg-white/10"
+                :class="{
+                  'justify-between ': settingsMenuTabs.indexOf(tab) === 2,
+                }"
+                v-for="tab in settingsMenuTabs.filter((item) => {
+                  return settingsMenuTabs.indexOf(item) < 4;
+                })"
+                :key="tab.text"
+                :to="tab.link"
+              >
+                <div class="flex items-center">
+                  <div class="px-4">
+                    <IconRenderer :iconName="tab.icon" class="w-6" />
+                  </div>
+                  <p>{{ tab.text }}</p>
+                </div>
+                <IconsRightArrow
+                  class="w-6 mr-4"
+                  :class="{ hidden: settingsMenuTabs.indexOf(tab) !== 2 }"
+                />
+              </NuxtLink>
+            </div>
+            <div class="py-2">
+              <NuxtLink
+                class="py-2 flex items-center hover:bg-white/10"
+                v-for="tab in settingsMenuTabs.filter((item) => {
+                  return settingsMenuTabs.indexOf(item) > 3;
+                })"
+                :key="tab.text"
+                :to="tab.link"
+                ><div class="px-4">
                   <IconRenderer :iconName="tab.icon" class="w-6" />
                 </div>
                 <p>{{ tab.text }}</p>
-              </div>
-              <IconsRightArrow
-                class="w-6 mr-4"
-                :class="{ hidden: settingsMenuTabs.indexOf(tab) !== 2 }"
-              />
-            </NuxtLink>
+              </NuxtLink>
+            </div>
+          </div>
+        </div>
+      </div>
+    </OnClickOutside>
+
+    <OnClickOutside @trigger="showSearch = false">
+      <div
+        class="flex min-w-screen justify-center transition-all duration-200"
+        :class="[showSearch ? 'opacity-100 visible' : 'opacity-0 invisible']"
+      >
+        <div
+          class="w-[95%] ytsm:w-[560px] ytmd:w-[720px] ytlg:w-[870px] absolute top-2 bg-[#212121] border border-[#333] rounded-sm"
+        >
+          <div class="flex border-b border-[#333]">
+            <button @click="showSearch = false" class="px-4">
+              <IconsBackArrow />
+            </button>
+            <label for="search" class="w-full">
+              <input
+                id="search"
+                v-model="search"
+                type="text"
+                class="text-xl font-medium outline-none bg-transparent text-white w-full py-2.5"
+                placeholder="Search"
+                autocomplete="off"
+            /></label>
+            <button
+              v-if="search !== ''"
+              @click="
+                autoFocusToSearchBar(0);
+                search = '';
+              "
+              class="transition-all duration-200 px-4"
+            >
+              <IconsClose />
+            </button>
           </div>
           <div class="py-2">
             <NuxtLink
-              class="py-2 flex items-center hover:bg-white/10"
-              v-for="tab in settingsMenuTabs.filter((item) => {
-                return settingsMenuTabs.indexOf(item) > 3;
-              })"
-              :key="tab.text"
-              :to="tab.link"
-              ><div class="px-4">
-                <IconRenderer :iconName="tab.icon" class="w-6" />
+              to="/"
+              @click="showSearch = false"
+              v-for="item in 7"
+              :key="item"
+              class="h-12 flex justify-between items-center hover:bg-white/10"
+            >
+              <div class="flex">
+                <IconsSearch wrapperElementClassList="w-6 h-6 mx-4" />
+                <p class="font-semibold">search query</p>
               </div>
-              <p>{{ tab.text }}</p>
+              <!-- <IconsDelete class="w-6 mr-5" /> -->
             </NuxtLink>
           </div>
         </div>
       </div>
-    </div>
-
-    <div
-      class="flex min-w-screen justify-center transition-all duration-200"
-      :class="[showSearch ? 'opacity-100 visible' : 'opacity-0 invisible']"
-    >
-      <div
-        class="w-[95%] ytsm:w-[560px] ytmd:w-[720px] ytlg:w-[870px] absolute top-2 bg-[#212121] border border-[#333] rounded-sm"
-      >
-        <div class="flex border-b border-[#333]">
-          <button @click="showSearch = false" class="px-4">
-            <IconsBackArrow />
-          </button>
-          <label for="search" class="w-full">
-            <input
-              id="search"
-              v-model="search"
-              type="text"
-              class="text-xl font-medium outline-none bg-transparent text-white w-full py-2.5"
-              placeholder="Search"
-              autocomplete="off"
-          /></label>
-          <button
-            v-if="search !== ''"
-            @click="
-              autoFocusToSearchBar(0);
-              search = '';
-            "
-            class="transition-all duration-200 px-4"
-          >
-            <IconsClose />
-          </button>
-        </div>
-        <div class="py-2">
-          <NuxtLink
-            to="/"
-            @click="showSearch = false"
-            v-for="item in 7"
-            :key="item"
-            class="h-12 flex justify-between items-center hover:bg-white/10"
-          >
-            <div class="flex">
-              <IconsSearch wrapperElementClassList="w-6 h-6 mx-4" />
-              <p class="font-semibold">search query</p>
-            </div>
-            <!-- <IconsDelete class="w-6 mr-5" /> -->
-          </NuxtLink>
-        </div>
-      </div>
-    </div>
-    <button
-      v-if="showSearch || showSettings"
-      @click="
-        showSearch = false;
-        showSettings = false;
-      "
-      class="absolute min-w-[calc(100vw-28px)] min-h-[100vh] cursor-default outline-none border-none -z-10"
-    />
+    </OnClickOutside>
   </header>
 </template>
+
 <style scoped>
 .scrollbarStyle::-webkit-scrollbar {
   width: 8px;
