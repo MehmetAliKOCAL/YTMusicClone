@@ -10,6 +10,7 @@ export default <Partial<Config>>{
         robotoExt:['Roboto', 'sans-serif']
       },
       screens:{
+        ytxs:'530px',
         ytsm:'615px',
         ytmd:'935px',
         ytlg:'1150px',
