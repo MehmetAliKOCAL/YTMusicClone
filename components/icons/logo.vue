@@ -1,5 +1,5 @@
 <template>
-  <svg class="ytsm:hidden" width="80" height="24" fill="none">
+  <svg class="ytsm:hidden" width="24" height="24" fill="none">
     <circle cx="12" cy="12" r="12" fill="red" />
     <ellipse
       cx="12.18"

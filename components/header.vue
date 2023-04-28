@@ -201,8 +201,8 @@ function autoFocusToSearchBar(delay) {
           </p>
         </button>
       </div>
-      <div class="flex space-x-5 justify-center items-center">
-        <IconsCast class="max-ytsm:hidden" />
+      <div class="flex justify-center items-center">
+        <IconsCast class="max-ytsm:hidden mr-6" />
         <button
           @click="
             showSettings = !showSettings;
@@ -214,11 +214,12 @@ function autoFocusToSearchBar(delay) {
             alt="user profile picture"
             width="26"
             height="26"
-            class="ml-1 border border-[#383838] rounded-full"
+            class="border border-[#383838] rounded-full"
           />
         </button>
       </div>
     </nav>
+
     <div
       :class="[showSettings ? 'opacity-100 visible' : 'opacity-0 invisible']"
       class="transition-all duration-200"
@@ -236,7 +237,7 @@ function autoFocusToSearchBar(delay) {
             class="rounded-full max-h-10 max-w-10"
           />
           <div class="cursor-default">
-            <p class="leading-5">Mehmet</p>
+            <p class="leading-5">GwynDev</p>
             <p class="mb-1">@TearsOfaPessimist</p>
             <NuxtLink to="/" class="text-[#3EA6FF] text-sm"
               >Manage your Google Account</NuxtLink
@@ -245,7 +246,7 @@ function autoFocusToSearchBar(delay) {
         </div>
         <div
           id="settingsMenuScrollBox"
-          class="overflow-auto text-sm settingsMenuScrollbar"
+          class="overflow-auto text-sm scrollbarStyle"
         >
           <div class="py-2 border-b border-[#383838]">
             <NuxtLink
@@ -288,12 +289,13 @@ function autoFocusToSearchBar(delay) {
         </div>
       </div>
     </div>
+
     <div
       class="flex min-w-screen justify-center transition-all duration-200"
       :class="[showSearch ? 'opacity-100 visible' : 'opacity-0 invisible']"
     >
       <div
-        class="w-full mx-10 ytsm:w-[560px] ytmd:w-[720px] ytlg:w-[870px] absolute top-2 bg-[#212121] border border-[#333] rounded-sm"
+        class="w-[95%] ytsm:w-[560px] ytmd:w-[720px] ytlg:w-[870px] absolute top-2 bg-[#212121] border border-[#333] rounded-sm"
       >
         <div class="flex border-b border-[#333]">
           <button @click="showSearch = false" class="px-4">
@@ -346,3 +348,14 @@ function autoFocusToSearchBar(delay) {
     />
   </header>
 </template>
+<style scoped>
+.scrollbarStyle::-webkit-scrollbar {
+  width: 8px;
+  background-color: #282828;
+  border: none;
+}
+
+.scrollbarStyle::-webkit-scrollbar-thumb {
+  background-color: #616160;
+}
+</style>
