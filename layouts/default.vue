@@ -15,6 +15,52 @@ watch(useRoute(), () => {
 
   if (useRoute().path === "/") changeBgImage();
 });
+
+function categories() {
+  if (useRoute().path === "/library") {
+    return [
+      {
+        name: "Playlists",
+        link: "/",
+      },
+      {
+        name: "Songs",
+        link: "/",
+      },
+      {
+        name: "Albums",
+        link: "/",
+      },
+      {
+        name: "Artists",
+        link: "/",
+      },
+    ];
+  } else {
+    return [
+      {
+        name: "Relax",
+        link: "/",
+      },
+      {
+        name: "Energize",
+        link: "/",
+      },
+      {
+        name: "Focus",
+        link: "/",
+      },
+      {
+        name: "Workout",
+        link: "/",
+      },
+      {
+        name: "Commute",
+        link: "/",
+      },
+    ];
+  }
+}
 </script>
 
 <template>
@@ -41,9 +87,9 @@ watch(useRoute(), () => {
     </div>
     <Header />
     <div
-      class="max-ytsm:px-4 max-ytlg:px-14 ytlg:max-w-[1060px] ytxl:max-w-[1275px] yt2xl:max-w-[1480px] mx-auto mt-5"
+      class="max-ytsm:px-4 max-ytlg:px-14 ytlg:max-w-[1060px] ytxl:max-w-[1275px] yt2xl:max-w-[1480px] mx-auto mt-7"
     >
-      <Categories />
+      <Categories :categories="categories()" />
       <slot />
     </div>
     <Footer />
@@ -69,25 +115,5 @@ watch(useRoute(), () => {
 
 body {
   background-color: rgb(3, 3, 3);
-}
-
-.settingsMenuScrollbar::-webkit-scrollbar {
-  width: 8px;
-  background-color: #282828;
-  border: none;
-}
-
-.settingsMenuScrollbar::-webkit-scrollbar-thumb {
-  background-color: #616160;
-}
-
-.categoriesScrollbar::-webkit-scrollbar {
-  height: 3px;
-  background-color: transparent;
-  border: none;
-}
-
-.categoriesScrollbar::-webkit-scrollbar-thumb {
-  background-color: rgba(255, 255, 255, 0.2);
 }
 </style>
