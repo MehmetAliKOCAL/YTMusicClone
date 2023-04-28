@@ -85,7 +85,7 @@ function categories() {
         class="absolute min-w-full h-1/2 bg-gradient-to-b from-ytblack/60 to-ytblack"
       />
     </div>
-    <Header />
+    <Header class="relative z-20" />
     <div
       class="max-ytsm:px-4 max-ytlg:px-14 ytlg:max-w-[1060px] ytxl:max-w-[1275px] yt2xl:max-w-[1480px] mx-auto mt-7"
     >
