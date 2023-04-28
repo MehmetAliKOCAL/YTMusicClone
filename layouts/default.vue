@@ -87,7 +87,7 @@ function categories() {
     </div>
     <Header class="relative z-20" />
     <div
-      class="max-ytsm:px-4 max-ytlg:px-14 ytlg:max-w-[1060px] ytxl:max-w-[1275px] yt2xl:max-w-[1480px] mx-auto mt-7"
+      class="max-ytsm:px-4 max-ytlg:px-14 ytlg:max-w-[1040px] ytxl:max-w-[1255px] yt2xl:max-w-[1470px] mx-auto mt-6 ytmd:mt-8 yt3xl:mt-10"
     >
       <Categories :categories="categories()" />
       <slot />

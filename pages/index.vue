@@ -121,7 +121,7 @@ function shuffle(array) {
 </script>
 
 <template>
-  <div class="mt-4">
+  <div class="mt-4 space-y-14 ytlg:space-y-24 ytxl:space-y-28 yt2xl:space-y-32">
     <HorizontalCarousel
       :items="shuffle(carouselItems)"
       :image="{
@@ -132,7 +132,7 @@ function shuffle(array) {
         isRounded: true,
       }"
       :title="{ text: 'Listen again', link: '/' }"
-      subtitle="GwynDev"
+      subtitle="Mehmet"
     />
     <HorizontalCarousel
       :items="shuffle(carouselItems)"

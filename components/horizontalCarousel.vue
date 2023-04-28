@@ -31,31 +31,32 @@ const props = defineProps({
 </script>
 
 <template>
-  <div ref="carouselWrapper" class="text-white w-full overflow-hidden">
-    <div class="flex items-center justify-between">
+  <div
+    ref="carouselWrapper"
+    class="text-white w-full overflow-hidden ytlg:mt-7 yt3xl:mt-9"
+  >
+    <div class="flex items-end justify-between">
       <div class="flex items-center">
         <NuxtLink v-if="props?.image?.showImage" :to="props.image.redirect">
           <img
             :class="{ 'rounded-full': props?.image?.isRounded }"
             :src="props?.image?.path"
             :alt="props?.image?.alt"
-            width="48"
-            height="48"
-            class="mr-4 max-w-12 max-h-12"
+            class="mr-4 max-w-10 max-h-10 yt2xs:max-w-12 yt2xs:max-h-12 ytlg:max-w-14 ytlg:max-h-14"
         /></NuxtLink>
-        <div class="flex flex-col gap-y-1">
-          <h1 class="text-[14px] text-[#AAA] uppercase">
+        <div class="flex flex-col max-ytlg:gap-y-1 yt2xl:gap-y-2">
+          <h1 class="max-ytxl:text-sm text-[#AAA] uppercase">
             {{ props.subtitle }}
           </h1>
           <NuxtLink
             :to="props.title?.link"
-            class="text-2xl font-bold"
+            class="text-[22px] font-bold tracking-wide ytlg:text-2xl ytxl:text-3xl yt2xl:text-[40px]"
             :class="[props.title?.link ? 'hover:underline' : 'cursor-default']"
             >{{ props.title.text }}</NuxtLink
           >
         </div>
       </div>
-      <div class="flex gap-x-6 items-center">
+      <div class="flex gap-x-6 items-end">
         <button
           class="py-2 px-4 h-fit border border-white/20 text-sm font-medium rounded-full transition-colors duration-200 hover:bg-white/10"
         >
@@ -90,13 +91,23 @@ const props = defineProps({
 
     <div
       ref="carousel"
-      class="mt-4 text-sm font-medium flex space-x-4 overflow-y-hidden overflow-x-auto scrollbarStyle"
+      class="mt-4 ytxl:mt-5 yt2xl:mt-6 max-ytxl:text-sm ytxl:leading-5 font-medium flex space-x-4 ytlg:space-x-6 overflow-y-hidden overflow-x-auto scrollbarStyle"
     >
       <div v-for="item in props.items" :key="item" class="flex">
-        <div :class="[item.type === 'music' ? 'w-[180px]' : 'w-[320px]']">
+        <div
+          :class="[
+            item.type === 'music'
+              ? 'w-[160px] ytsm:w-[180px] ytlg:w-[190px] yt2xl:w-[226px]'
+              : 'w-[285px] ytsm:w-[320px] ytlg:w-[339px] yt2xl:w-[402px]',
+          ]"
+        >
           <div
             class="relative flex justify-center items-center"
-            :class="[item.type === 'music' ? 'w-[180px]' : 'w-[320px]']"
+            :class="[
+              item.type === 'music'
+                ? 'w-[160px] ytsm:w-[180px] ytlg:w-[190px] yt2xl:w-[226px]'
+                : 'w-[285px] ytsm:w-[320px] ytlg:w-[339px] yt2xl:w-[402px]',
+            ]"
           >
             <img
               :src="item.image"
@@ -125,9 +136,11 @@ const props = defineProps({
             />
           </div>
 
-          <NuxtLink :to="item.link" class="mt-3 line-clamp-2 hover:underline">{{
-            item.name
-          }}</NuxtLink>
+          <NuxtLink
+            :to="item.link"
+            class="mt-3 line-clamp-2 hover:underline ytxl:mb-[2px]"
+            >{{ item.name }}</NuxtLink
+          >
 
           <div
             v-if="item.type === 'music'"
