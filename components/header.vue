@@ -299,7 +299,7 @@ function autoFocusToSearchBar(delay) {
       >
         <div class="flex border-b border-[#333]">
           <button @click="showSearch = false" class="px-4">
-            <IconsLeftArrow />
+            <IconsBackArrow />
           </button>
           <label for="search" class="w-full">
             <input
