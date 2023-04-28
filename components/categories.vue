@@ -26,21 +26,19 @@ function hideInactiveScrollbar() {
 </script>
 
 <template>
-  <div class="rounded-bl-md overflow-hidden">
-    <div
-      @scroll="hideInactiveScrollbar()"
-      ref="componentWrapper"
-      class="flex gap-3 py-4 overflow-x-auto transition-all scrollbarStyle showScrollbar"
+  <div
+    @scroll="hideInactiveScrollbar()"
+    ref="componentWrapper"
+    class="flex gap-3 py-4 overflow-x-auto transition-all showScrollbar scrollbarStyle"
+  >
+    <NuxtLink
+      v-for="category in props.categories"
+      :key="category.name"
+      :to="category.link"
+      class="py-2 px-3 rounded-lg text-sm bg-white/10 text-white hover:bg-white/20 focus:bg-white/30 transition-colors duration-200"
     >
-      <NuxtLink
-        v-for="category in props.categories"
-        :key="category.name"
-        :to="category.link"
-        class="py-2 px-3 rounded-lg text-sm bg-white/10 text-white hover:bg-white/20 focus:bg-white/30 transition-colors duration-200"
-      >
-        {{ category.name }}
-      </NuxtLink>
-    </div>
+      {{ category.name }}
+    </NuxtLink>
   </div>
 </template>
 
@@ -58,6 +56,7 @@ function hideInactiveScrollbar() {
 .scrollbarStyle::-webkit-scrollbar {
   height: 3px;
   background-color: transparent;
+  border: transparent;
 }
 
 .scrollbarStyle::-webkit-scrollbar-thumb {
