@@ -93,6 +93,7 @@ function categories() {
       <slot />
     </div>
     <Footer />
+    <SongSettingsMenu />
   </div>
 </template>
 
