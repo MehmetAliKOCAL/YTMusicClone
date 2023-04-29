@@ -323,7 +323,6 @@ function autoFocusToSearchBar(delay) {
           <div class="py-2">
             <NuxtLink
               to="/"
-              @click="showSearch = false"
               v-for="item in 7"
               :key="item"
               class="h-12 flex justify-between items-center hover:bg-white/10"
