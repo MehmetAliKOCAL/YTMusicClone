@@ -35,7 +35,12 @@ function hideInactiveScrollbar() {
       v-for="category in props.categories"
       :key="category.name"
       :to="category.link"
-      class="py-2 px-3 rounded-lg text-sm bg-white/10 text-white hover:bg-white/20 focus:bg-white/30 transition-colors duration-200"
+      class="py-2 px-3 rounded-lg text-sm transition-colors duration-200"
+      :class="[
+        category.link === useRoute().path
+          ? 'text-black bg-white'
+          : 'text-white bg-white/10 hover:bg-white/20 focus:bg-white/30',
+      ]"
     >
       {{ category.name }}
     </NuxtLink>
