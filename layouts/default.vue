@@ -40,23 +40,23 @@ function categories() {
     return [
       {
         name: "Relax",
-        link: "/",
+        link: "/relax",
       },
       {
         name: "Energize",
-        link: "/",
+        link: "/energize",
       },
       {
         name: "Focus",
-        link: "/",
+        link: "/focus",
       },
       {
         name: "Workout",
-        link: "/",
+        link: "/workout",
       },
       {
         name: "Commute",
-        link: "/",
+        link: "/commute",
       },
     ];
   }

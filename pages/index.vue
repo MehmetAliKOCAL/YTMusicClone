@@ -123,7 +123,7 @@ function shuffle(array) {
 <template>
   <div class="mt-4 space-y-14 ytlg:space-y-24 ytxl:space-y-28 yt2xl:space-y-32">
     <HorizontalCarousel
-      :items="shuffle(carouselItems)"
+      :items="carouselItems"
       :image="{
         path: '/images/pfp.jpg',
         redirect: '/',
@@ -132,15 +132,17 @@ function shuffle(array) {
         isRounded: true,
       }"
       :title="{ text: 'Listen again', link: '/' }"
-      subtitle="Mehmet"
+      subtitle="GwynDev"
+      :showMore="true"
     />
     <HorizontalCarousel
-      :items="shuffle(carouselItems)"
-      :title="{ text: 'SHADXWBXRN', link: '/' }"
-      subtitle="More From"
+      :items="carouselItems"
+      :title="{ text: 'Quick picks', link: '/' }"
+      subtitle="Start Radio From A Song"
+      :isCompact="true"
     />
     <HorizontalCarousel
-      :items="shuffle(carouselItems)"
+      :items="carouselItems"
       :image="{
         path: 'https://lh3.googleusercontent.com/SO7gH564_3Kq9hCODuPYJVyGDNyMeH0J8u--bwcI5hSvMwulIVWtY5mJx3R0vBcqglhOU_wLa9ZIBuU=w60-h60-l90-rj',
         redirect: '/',
@@ -150,10 +152,12 @@ function shuffle(array) {
       }"
       :title="{ text: 'Crystal Castles', link: '/' }"
       subtitle="Similar To"
+      :showMore="true"
     />
     <HorizontalCarousel
-      :items="shuffle(carouselItems)"
+      :items="carouselItems"
       :title="{ text: 'Mixed for you', link: '/' }"
+      :showMore="true"
     />
   </div>
 </template>
