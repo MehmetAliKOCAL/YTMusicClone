@@ -41,7 +41,7 @@ const songSettings = [
   <OnClickOutside @trigger="globalVariables.showSongSettings = false">
     <div
       id="songSettingsMenu"
-      class="py-4 z-10 absolute text-white bg-[#202120] border border-white/10 rounded-sm transition-all duration-100 overflow-auto"
+      class="py-4 z-10 absolute text-white bg-[#202120] border border-white/10 rounded-sm overflow-auto"
       :class="[
         globalVariables.showSongSettings
           ? 'opacity-100 visible'
