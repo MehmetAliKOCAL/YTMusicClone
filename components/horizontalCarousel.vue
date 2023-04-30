@@ -3,6 +3,10 @@ import { useGlobalVariablesStore } from "~/store/globalVariables";
 import { useScroll, useElementSize } from "@vueuse/core";
 const globalVariables = useGlobalVariablesStore();
 
+const hoveringSong = ref(null);
+const disliked = ref([]);
+const liked = ref([]);
+
 const carousel = ref(null);
 const carouselWrapper = ref(null);
 
@@ -105,6 +109,19 @@ function resizeSettingsMenu() {
     } else {
       settingsMenu.style.height = "fit-content";
     }
+  }
+}
+
+function toggleLikeState(array, counterArray, element) {
+  if (counterArray.includes(element)) {
+    const index = counterArray.indexOf(element);
+    counterArray.splice(index, 1);
+    array.push(element);
+  } else if (array.includes(element)) {
+    const index = array.indexOf(element);
+    array.splice(index, 1);
+  } else {
+    array.push(element);
   }
 }
 </script>
@@ -278,12 +295,14 @@ function resizeSettingsMenu() {
 
     <div
       v-else
-      class="max-w-fit mt-4 ytxl:mt-5 yt2xl:mt-6 max-ytxl:text-sm ytxl:leading-5 font-medium flex flex-wrap overflow-y-hidden overflow-x-auto scrollbarStyle gap-x-6 gap-y-4"
+      class="max-w-fit mt-4 ytxl:mt-5 yt2xl:mt-6 max-ytxl:text-sm ytxl:leading-5 font-medium flex flex-wrap overflow-y-hidden overflow-x-auto scrollbarStyle gap-x-14 gap-y-4"
     >
       <div
+        @mouseenter="hoveringSong = item.name"
+        @mouseleave="hoveringSong = null"
         v-for="item in props.items"
         :key="item"
-        class="w-[460px] mr-8 relative"
+        class="w-[460px] relative"
       >
         <div class="flex items-center">
           <img
@@ -292,15 +311,24 @@ function resizeSettingsMenu() {
             class="w-12 h-12 mr-4 rounded-sm object-cover object-center"
           />
 
-          <div class="top-0 flex w-full h-full absolute items-center">
-            <IconsPlay
-              :wrapperElementClassList="'w-12 p-3 bg-white/70 invert-[100%]'"
-            />
-          </div>
+          <ClientOnly>
+            <div
+              v-if="hoveringSong === item.name"
+              class="top-0 flex w-12 h-full absolute items-center justify-center cursor-pointer bg-black/70"
+            >
+              <IconsPlay
+                v-wave="{
+                  color: 'black',
+                  duration: 0.1,
+                }"
+                :wrapperElementClassList="'p-1 w-8 rounded-full invert-[100%]'"
+              />
+            </div>
+          </ClientOnly>
 
-          <div class="flex w-full relative">
-            <div class="max-w-[396px]">
-              <p class="truncate">{{ item.name }}</p>
+          <div class="flex w-full relative truncate">
+            <div class="truncate w-inherit">
+              <p class="truncate max-w-fit cursor-pointer">{{ item.name }}</p>
               <div class="flex space-x-1 text-[#B4B4B4]">
                 <IconsExplicit v-if="item?.explicit" />
                 <div class="truncate space-x-1">
@@ -322,18 +350,55 @@ function resizeSettingsMenu() {
                       item?.album?.toLowerCase() === 'single' ||
                       item?.album?.toLowerCase() === 'song'
                     "
-                    class="min-w-max inline"
+                    class="min-w-max inline cursor-pointer hover:underline"
                   >
                     {{ item.name }}
                   </p>
-                  <p v-else-if="item?.album" class="min-w-max inline">
+                  <p
+                    v-else-if="item?.album"
+                    class="min-w-max inline cursor-pointer hover:underline"
+                  >
                     {{ item.album }}
                   </p>
                   <p v-else class="min-w-max inline">{{ item.views }} views</p>
                 </div>
               </div>
             </div>
-            <div>aosdsd</div>
+            <div v-if="hoveringSong === item.name" class="ml-2 flex gap-x-2">
+              <ClientOnly>
+                <IconsDislike
+                  v-wave="{
+                    duration: 0.05,
+                    color: 'black',
+                  }"
+                  @click="toggleLikeState(disliked, liked, item.name)"
+                  :disliked="disliked.includes(item.name)"
+                  wrapperElementClassList="p-2 w-10 rounded-full invert-[100%] cursor-pointer border border-transparent active:border-[#393939] hover:bg-black/10 transition-colors duration-200"
+                />
+                <IconsLike
+                  v-wave="{
+                    duration: 0.05,
+                    color: 'black',
+                  }"
+                  @click="toggleLikeState(liked, disliked, item.name)"
+                  :liked="liked.includes(item.name)"
+                  wrapperElementClassList="p-2 w-10 rounded-full invert-[100%] cursor-pointer border border-transparent active:border-[#393939] hover:bg-black/10 transition-colors duration-200"
+                />
+                <IconsSettingsDots
+                  v-wave="{
+                    duration: 0.05,
+                    color: 'black',
+                  }"
+                  @click="
+                    globalVariables.showSongSettings =
+                      !globalVariables.showSongSettings;
+                    repositionSettingsMenu();
+                    resizeSettingsMenu();
+                  "
+                  wrapperElementClassList="p-2 w-10 rounded-full invert-[100%] cursor-pointer border border-transparent active:border-[#393939] hover:bg-black/10 transition-colors duration-200"
+                />
+              </ClientOnly>
+            </div>
           </div>
         </div>
       </div>
