@@ -1,6 +1,6 @@
 ## YouTube Music Clone
 
-### [Live Preview](https://yt-music-clone.gwyndev.com/)
+### [Live Preview](https://music.gwyndev.com/)
 
 A YouTube Music clone made by Nuxt.js and Tailwind CSS. Currently in development, not much to see here yet.
 
