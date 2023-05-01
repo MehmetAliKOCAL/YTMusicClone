@@ -86,6 +86,7 @@ function categories() {
       />
     </div>
     <Header class="relative z-20" />
+    <SongSettingsMenu />
     <div
       class="max-ytsm:px-4 max-ytlg:px-14 ytlg:max-w-[1040px] ytxl:max-w-[1255px] yt2xl:max-w-[1470px] mx-auto mt-6 ytmd:mt-8 yt3xl:mt-10"
     >
@@ -93,7 +94,6 @@ function categories() {
       <slot />
     </div>
     <Footer />
-    <SongSettingsMenu />
   </div>
 </template>
 

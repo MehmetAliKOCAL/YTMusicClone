@@ -290,6 +290,7 @@ function autoFocusToSearchBar(delay) {
 
     <OnClickOutside @trigger="showSearch = false">
       <div
+        @keypress.enter="navigateTo('/search/' + search)"
         class="flex min-w-screen justify-center transition-all duration-200"
         :class="[showSearch ? 'opacity-100 visible' : 'opacity-0 invisible']"
       >
@@ -322,7 +323,7 @@ function autoFocusToSearchBar(delay) {
           </div>
           <div class="py-2">
             <NuxtLink
-              to="/"
+              :to="'/search/' + search"
               v-for="item in 7"
               :key="item"
               class="h-12 flex justify-between items-center hover:bg-white/10"
