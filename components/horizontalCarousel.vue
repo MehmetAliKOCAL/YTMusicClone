@@ -8,6 +8,7 @@ const disliked = ref([]);
 const liked = ref([]);
 
 const carousel = ref(null);
+const compactCarousel = ref(null);
 const carouselWrapper = ref(null);
 
 const { width: carouselWidth } = useElementSize(carousel);
@@ -18,6 +19,12 @@ const { x: carouselScrollValue, arrivedState: isFullyScrolled } = useScroll(
     behavior: "smooth",
   }
 );
+
+const { width: compactCarouselWidth } = useElementSize(compactCarousel);
+const { x: compactCarouselScrollValue, arrivedState: isCompactFullyScrolled } =
+  useScroll(compactCarousel, {
+    behavior: "smooth",
+  });
 
 const props = defineProps({
   image: {
@@ -124,6 +131,29 @@ function toggleLikeState(array, counterArray, element) {
     array.push(element);
   }
 }
+
+function splitItemsToArrays() {
+  const items = props.items;
+  const quaternaryCount = Math.floor(items.length / 4);
+  const leftoverCount = items.length % 4;
+
+  const mainArray = [];
+  for (let x = 0; x < quaternaryCount * 4; x += 4) {
+    const altArray = [];
+    for (let z = 0; z < 4; z++) {
+      altArray.push(items[z + x]);
+    }
+    mainArray.push(altArray);
+  }
+
+  const leftoverArray = [];
+  for (let y = 0; y < leftoverCount; y++) {
+    leftoverArray.push(items[items.length - 1 - y]);
+  }
+  mainArray.push(leftoverArray);
+
+  return mainArray;
+}
 </script>
 
 <template>
@@ -171,26 +201,49 @@ function toggleLikeState(array, counterArray, element) {
           </button></ClientOnly
         >
         <div
-          v-if="carouselWidth >= carouselWrapperWidth"
+          v-if="
+            carouselWidth >= carouselWrapperWidth ||
+            compactCarouselWidth >= carouselWrapperWidth
+          "
           class="flex gap-x-4 items-center max-ytxs:hidden"
         >
-          <button @click="carouselScrollValue -= 750">
+          <button
+            @click="
+              props?.isCompact
+                ? (compactCarouselScrollValue -= 750)
+                : (carouselScrollValue -= 750)
+            "
+          >
             <IconsLeftArrow
               color="white"
               class="w-10 p-2 rounded-full border border-white/20 transform transition-all duration-200"
               :class="[
-                isFullyScrolled.left
+                props.isCompact
+                  ? isCompactFullyScrolled.left
+                    ? 'cursor-default opacity-30'
+                    : 'hover:bg-white/10 active:scale-90'
+                  : isFullyScrolled.left
                   ? 'cursor-default opacity-30'
                   : 'hover:bg-white/10 active:scale-90',
               ]"
             />
           </button>
-          <button @click="carouselScrollValue += 750">
+          <button
+            @click="
+              props?.isCompact
+                ? (compactCarouselScrollValue += 750)
+                : (carouselScrollValue += 750)
+            "
+          >
             <IconsRightArrow
               color="white"
               class="w-10 p-2 rounded-full border border-white/20 transform transition-all duration-200"
               :class="[
-                isFullyScrolled.right
+                props.isCompact
+                  ? isCompactFullyScrolled.right
+                    ? 'cursor-default opacity-30'
+                    : 'hover:bg-white/10 active:scale-90'
+                  : isFullyScrolled.right
                   ? 'cursor-default opacity-30'
                   : 'hover:bg-white/10 active:scale-90',
               ]"
@@ -295,109 +348,121 @@ function toggleLikeState(array, counterArray, element) {
 
     <div
       v-else
-      class="max-w-fit mt-4 ytxl:mt-5 yt2xl:mt-6 max-ytxl:text-sm ytxl:leading-5 font-medium flex flex-wrap overflow-y-hidden overflow-x-auto scrollbarStyle gap-x-14 gap-y-4"
+      ref="compactCarousel"
+      class="max-w-fit mt-4 ytxl:mt-5 yt2xl:mt-6 max-ytxl:text-sm ytxl:leading-5 font-medium flex overflow-y-hidden overflow-x-auto scrollbarStyle gap-x-14"
     >
       <div
-        @mouseenter="hoveringSong = item.name"
-        @mouseleave="hoveringSong = null"
-        v-for="item in props.items"
-        :key="item"
-        class="w-[460px] relative"
+        v-for="array in splitItemsToArrays()"
+        :key="array"
+        class="flex flex-col gap-y-4"
       >
-        <div class="flex items-center">
-          <img
-            :src="item.image"
-            :alt="item.name"
-            class="w-12 h-12 mr-4 rounded-sm object-cover object-center"
-          />
+        <div
+          @mouseenter="hoveringSong = item.name"
+          @mouseleave="hoveringSong = null"
+          v-for="item in array"
+          :key="item"
+          class="w-[460px] min-w-[460px] relative"
+        >
+          <div class="flex items-center">
+            <img
+              :src="item.image"
+              :alt="item.name"
+              class="w-12 h-12 mr-4 rounded-sm object-cover object-center"
+            />
 
-          <ClientOnly>
-            <div
-              v-if="hoveringSong === item.name"
-              class="top-0 flex w-12 h-full absolute items-center justify-center cursor-pointer bg-black/70"
-            >
-              <IconsPlay
-                v-wave="{
-                  color: 'black',
-                  duration: 0.1,
-                }"
-                :wrapperElementClassList="'p-1 w-8 rounded-full invert-[100%]'"
-              />
-            </div>
-          </ClientOnly>
+            <ClientOnly>
+              <div
+                v-if="hoveringSong === item.name"
+                class="top-0 flex w-12 h-full absolute items-center justify-center cursor-pointer bg-black/70"
+              >
+                <IconsPlay
+                  v-wave="{
+                    color: 'black',
+                    duration: 0.1,
+                  }"
+                  :wrapperElementClassList="'p-1 w-8 rounded-full invert-[100%]'"
+                />
+              </div>
+            </ClientOnly>
 
-          <div class="flex w-full relative truncate">
-            <div class="truncate w-inherit">
-              <p class="truncate max-w-fit cursor-pointer">{{ item.name }}</p>
-              <div class="flex space-x-1 text-[#B4B4B4]">
-                <IconsExplicit v-if="item?.explicit" />
-                <div class="truncate space-x-1">
-                  <NuxtLink
-                    v-for="artist in item.artists"
-                    :key="artist.name"
-                    :to="artist.link"
-                    class="hover:underline min-w-max"
-                    >{{
-                      artist.name +
-                      (item.artists.indexOf(artist) !== item.artists.length - 1
-                        ? ","
-                        : "")
-                    }}
-                  </NuxtLink>
-                  <p class="min-w-max inline">•</p>
-                  <p
-                    v-if="
-                      item?.album?.toLowerCase() === 'single' ||
-                      item?.album?.toLowerCase() === 'song'
-                    "
-                    class="min-w-max inline cursor-pointer hover:underline"
-                  >
-                    {{ item.name }}
-                  </p>
-                  <p
-                    v-else-if="item?.album"
-                    class="min-w-max inline cursor-pointer hover:underline"
-                  >
-                    {{ item.album }}
-                  </p>
-                  <p v-else class="min-w-max inline">{{ item.views }} views</p>
+            <div class="flex w-full relative truncate">
+              <div class="truncate w-inherit">
+                <p class="truncate max-w-fit cursor-pointer">
+                  {{ item.name }}
+                </p>
+                <div class="flex space-x-1 text-[#B4B4B4]">
+                  <IconsExplicit v-if="item?.explicit" />
+                  <div class="truncate space-x-1">
+                    <NuxtLink
+                      v-for="artist in item.artists"
+                      :key="artist.name"
+                      :to="artist.link"
+                      class="hover:underline min-w-max"
+                      >{{
+                        artist.name +
+                        (item.artists.indexOf(artist) !==
+                        item.artists.length - 1
+                          ? ","
+                          : "")
+                      }}
+                    </NuxtLink>
+                    <p class="min-w-max inline">•</p>
+                    <p
+                      v-if="
+                        item?.album?.toLowerCase() === 'single' ||
+                        item?.album?.toLowerCase() === 'song'
+                      "
+                      class="min-w-max inline cursor-pointer hover:underline"
+                    >
+                      {{ item.name }}
+                    </p>
+                    <p
+                      v-else-if="item?.album"
+                      class="min-w-max inline cursor-pointer hover:underline"
+                    >
+                      {{ item.album }}
+                    </p>
+                    <p v-else class="min-w-max inline">
+                      {{ item.views }} views
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div v-if="hoveringSong === item.name" class="ml-2 flex gap-x-2">
-              <ClientOnly>
-                <IconsDislike
-                  v-wave="{
-                    duration: 0.05,
-                    color: 'black',
-                  }"
-                  @click="toggleLikeState(disliked, liked, item.name)"
-                  :disliked="disliked.includes(item.name)"
-                  wrapperElementClassList="p-2 w-10 rounded-full invert-[100%] cursor-pointer border border-transparent active:border-[#393939] hover:bg-black/10 transition-colors duration-200"
-                />
-                <IconsLike
-                  v-wave="{
-                    duration: 0.05,
-                    color: 'black',
-                  }"
-                  @click="toggleLikeState(liked, disliked, item.name)"
-                  :liked="liked.includes(item.name)"
-                  wrapperElementClassList="p-2 w-10 rounded-full invert-[100%] cursor-pointer border border-transparent active:border-[#393939] hover:bg-black/10 transition-colors duration-200"
-                />
-                <IconsSettingsDots
-                  v-wave="{
-                    duration: 0.05,
-                    color: 'black',
-                  }"
-                  @click="
-                    globalVariables.showSongSettings =
-                      !globalVariables.showSongSettings;
-                    repositionSettingsMenu();
-                    resizeSettingsMenu();
-                  "
-                  wrapperElementClassList="p-2 w-10 rounded-full invert-[100%] cursor-pointer border border-transparent active:border-[#393939] hover:bg-black/10 transition-colors duration-200"
-                />
-              </ClientOnly>
+              <div v-if="hoveringSong === item.name" class="ml-2 flex gap-x-2">
+                <ClientOnly>
+                  <IconsDislike
+                    v-wave="{
+                      duration: 0.05,
+                      color: 'black',
+                    }"
+                    @click="toggleLikeState(disliked, liked, item.name)"
+                    :disliked="disliked.includes(item.name)"
+                    wrapperElementClassList="p-2 w-10 rounded-full invert-[100%] cursor-pointer border border-transparent active:border-[#393939] hover:bg-black/10 transition-colors duration-200"
+                  />
+                  <IconsLike
+                    v-wave="{
+                      duration: 0.05,
+                      color: 'black',
+                    }"
+                    @click="toggleLikeState(liked, disliked, item.name)"
+                    :liked="liked.includes(item.name)"
+                    wrapperElementClassList="p-2 w-10 rounded-full invert-[100%] cursor-pointer border border-transparent active:border-[#393939] hover:bg-black/10 transition-colors duration-200"
+                  />
+                  <IconsSettingsDots
+                    v-wave="{
+                      duration: 0.05,
+                      color: 'black',
+                    }"
+                    @click="
+                      globalVariables.showSongSettings =
+                        !globalVariables.showSongSettings;
+                      repositionSettingsMenu();
+                      resizeSettingsMenu();
+                    "
+                    wrapperElementClassList="p-2 w-10 rounded-full invert-[100%] cursor-pointer border border-transparent active:border-[#393939] hover:bg-black/10 transition-colors duration-200"
+                  />
+                </ClientOnly>
+              </div>
             </div>
           </div>
         </div>
