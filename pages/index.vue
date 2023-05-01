@@ -2,6 +2,67 @@
 const carouselItems = [
   {
     type: "music",
+    name: "UNFAZED",
+    artists: [
+      {
+        name: "ARXMANE",
+        link: "/",
+      },
+    ],
+    image:
+      "https://lh3.googleusercontent.com/KKt33I_H9O5AnHs6i1Ey1qUcK9bzkEAx-6jap1OLkJ4dDpQvm-D9hnk_LtH-8FKwcYMVb0mplEtAz-Z2PQ=w544-h544-l90-rj",
+    link: "/",
+    album: "Single",
+  },
+  {
+    type: "video",
+    name: "HIT LIST",
+    artists: [
+      {
+        name: "Pharmacist",
+        link: "/",
+      },
+    ],
+    image:
+      "https://i.ytimg.com/vi/lIB9exiMDLk/sddefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCghqEJQEGHgg6AJIWg&rs=AMzJL3k0b6iNayMQ9qDpqjCxsna997yOAg",
+    link: "/",
+    views: "144K",
+  },
+  {
+    type: "music",
+    name: "GHOST! (Sped Up)",
+    artists: [
+      {
+        name: "phonk.me",
+        link: "/",
+      },
+      {
+        name: "KIIXSHI",
+        link: "/",
+      },
+    ],
+    image:
+      "https://lh3.googleusercontent.com/jTuV7IX6XuAmqxiSW-K0l2-06QhasGdVp3yV41EJzYNRV2OnMPrvS_dnT4SOQTYkAeZ1Mp1gSjjUskDq=w544-h544-l90-rj",
+    link: "/",
+    album: "Single",
+  },
+  {
+    type: "music",
+    name: "Fear (Sped Up)",
+    artists: [
+      {
+        name: "Hensonn",
+        link: "/",
+      },
+    ],
+    image:
+      "https://lh3.googleusercontent.com/3ps81ZHCkeH5prAobz5gU1AAYoM6qE6g64CaF7ytcfaxbRS7d3_T7N_DkeJauhUpCNltBO-8LG1kvUCV=w544-h544-l90-rj",
+    link: "/",
+    album: "Song",
+    explicit: true,
+  },
+  {
+    type: "music",
     name: "Kerosene (Phonk Version)",
     artists: [
       {
@@ -12,8 +73,50 @@ const carouselItems = [
     image:
       "https://lh3.googleusercontent.com/2Km9wdDhevIp1rK1dlhRFgSGmMH5T0FhgX4DLwtJ3mGucJlIINmCO8rQDWcA-shuMQiSHFVd6RzcTLs=w544-h544-l90-rj",
     link: "https://music.youtube.com/watch?v=bQQ0cZk8dW8&list=RDAMVMTj9RZ17FcQY",
-    album: "2023",
-    explicit: false,
+    album: "Single",
+  },
+  {
+    type: "video",
+    name: "BRAINSHOT",
+    artists: [
+      {
+        name: "Pharmacist",
+        link: "/",
+      },
+    ],
+    image:
+      "https://i.ytimg.com/vi/gailByDebJc/sddefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCghqEJQEGHgg6AJIWg&rs=AMzJL3mrdjDWQz_E1wEw7-Dggm6J9LJ6lg",
+    link: "/",
+    views: "230K",
+  },
+  {
+    type: "music",
+    name: "Spacey supp",
+    artists: [
+      {
+        name: "Hensonn",
+        link: "/",
+      },
+    ],
+    image:
+      "https://lh3.googleusercontent.com/xX1ZX4MUV7Gl6p9HkoEFZQAsafwaJB1VwDorEjp106wl1LTAMoMYEIw-cm392nMMTHVLI8M9A0x1iWie=w544-h544-l90-rj",
+    link: "/",
+    album: "Single",
+    explicit: true,
+  },
+  {
+    type: "music",
+    name: "hotline bling (billie version)",
+    artists: [
+      {
+        name: "hazel & instrumental version",
+        link: "/",
+      },
+    ],
+    image:
+      "https://lh3.googleusercontent.com/QEbU6zBoCgjoNtfnHWp5rP3uJRAE_is9_aRpulOOhDgMbl3dw44pOI5XBa3BcbHlBKc3yBxkPXYn6M8=w226-h226-l90-rj",
+    link: "/",
+    album: "Song",
   },
   {
     type: "music",
@@ -97,27 +200,11 @@ const carouselItems = [
     name: "lana del rey - yes to heaven (intro loop 0.80x speed)",
     artists: [{ name: "Myxomatosis", link: "/" }],
     image:
-      "https://i.ytimg.com/vi/9tUg46n9KPs/sddefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCghqEJQEGHgg6AJIWg&rs=AMzJL3lFqdzJuBvPPRuGdrg9Si3twFCQVA",
+      "https://i.ytimg.com/vi/TkWjvgzu6Os/sddefault.jpg?sqp=-oaymwEWCJADEOEBIAQqCghqEJQEGHgg6AJIWg&rs=AMzJL3nMPhA3lRQ0NqEshikdHgKzzx5kIg",
     link: "/",
     views: "12K",
   },
 ];
-
-function shuffle(array) {
-  let currentIndex = array.length,
-    randomIndex;
-
-  while (currentIndex != 0) {
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex--;
-
-    [array[currentIndex], array[randomIndex]] = [
-      array[randomIndex],
-      array[currentIndex],
-    ];
-  }
-  return array;
-}
 </script>
 
 <template>
