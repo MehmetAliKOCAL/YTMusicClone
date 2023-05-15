@@ -1,11 +1,17 @@
 <script setup>
 import { OnClickOutside } from "@vueuse/components";
 
+const query = ref(encodeURIComponent(""));
+let searchResult = ref("");
+async function search() {
+  showSearch.value = false;
+  searchResult.value = await $fetch(`/api/search/${query.value}`);
+}
+
 const elementThatBeingHovered = ref("");
 const showSettings = ref(false);
 const showSearch = ref(false);
 let scrollValue = ref(0);
-const search = ref("");
 
 const headerTabs = [
   {
@@ -119,8 +125,9 @@ onBeforeMount(() => {
 
 function autoFocusToSearchBar(delay) {
   if (process.client && showSearch) {
+    const searchBar = document.getElementById("searchBar");
     setTimeout(() => {
-      document.getElementById("search").focus();
+      searchBar.focus();
     }, delay);
   }
 }
@@ -182,7 +189,7 @@ function autoFocusToSearchBar(delay) {
           </NuxtLink>
         </div>
         <button
-          @mouseenter="elementThatBeingHovered = 'search'"
+          @mouseenter="elementThatBeingHovered = 'searchBar'"
           @mouseleave="elementThatBeingHovered = ''"
           @click="
             showSearch = !showSearch;
@@ -195,7 +202,7 @@ function autoFocusToSearchBar(delay) {
             :elementThatBeingHovered="elementThatBeingHovered"
           />
           <p
-            :class="{ 'text-white': elementThatBeingHovered === 'search' }"
+            :class="{ 'text-white': elementThatBeingHovered === 'searchBar' }"
             class="text-xl font-medium max-ytlg:hidden ml-1"
           >
             Search
@@ -290,7 +297,7 @@ function autoFocusToSearchBar(delay) {
 
     <OnClickOutside @trigger="showSearch = false">
       <div
-        @keypress.enter="navigateTo('/search/' + search)"
+        @keypress.enter="navigateTo(`/search/${query}`)"
         class="flex min-w-screen justify-center transition-all duration-200"
         :class="[showSearch ? 'opacity-100 visible' : 'opacity-0 invisible']"
       >
@@ -301,36 +308,40 @@ function autoFocusToSearchBar(delay) {
             <button @click="showSearch = false" class="px-4">
               <IconsBackArrow />
             </button>
-            <label for="search" class="w-full">
+            <label for="searchBar" class="w-full">
               <input
-                id="search"
-                v-model="search"
+                @change="search()"
+                id="searchBar"
+                v-model="query"
                 type="text"
                 class="text-xl font-medium outline-none bg-transparent text-white w-full py-2.5"
                 placeholder="Search"
                 autocomplete="off"
             /></label>
             <button
-              v-if="search !== ''"
+              v-if="query !== ''"
               @click="
                 autoFocusToSearchBar(0);
-                search = '';
+                query = '';
               "
               class="transition-all duration-200 px-4"
             >
               <IconsClose />
             </button>
           </div>
+
           <div class="py-2">
             <NuxtLink
-              :to="'/search/' + search"
-              v-for="item in 7"
+              :to="`/search/${query}`"
+              v-for="item in searchResult?.items"
               :key="item"
-              class="h-12 flex justify-between items-center hover:bg-white/10"
+              class="h-12 flex justify-between items-center hover:bg-white/10 min-w-full"
             >
               <div class="flex">
                 <IconsSearch wrapperElementClassList="w-6 h-6 mx-4" />
-                <p class="font-semibold">search query</p>
+                <p class="font-semibold line-clamp-1">
+                  {{ item.title }}
+                </p>
               </div>
               <!-- <IconsDelete class="w-6 mr-5" /> -->
             </NuxtLink>
