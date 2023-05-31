@@ -5,13 +5,14 @@ const query = ref(encodeURIComponent(""));
 let searchResult = ref("");
 async function search() {
   showSearch.value = false;
-  searchResult.value = await $fetch(`/api/search/${query.value}`);
+  searchResult.value = await $fetch(`/api/search?query=${query.value}&limit=7`);
 }
 
 const elementThatBeingHovered = ref("");
 const showSettings = ref(false);
 const showSearch = ref(false);
 let scrollValue = ref(0);
+let settingsMenuScrollBox = ref(null);
 
 const headerTabs = [
   {
@@ -89,13 +90,11 @@ const settingsMenuTabs = [
   },
 ];
 
-onBeforeMount(() => {
+onMounted(() => {
   if (process.client) {
     function resizeSettingsMenuScrollBox() {
-      let settingsMenuScrollBox = document.getElementById(
-        "settingsMenuScrollBox"
-      ).style;
-      settingsMenuScrollBox.maxHeight = window.innerHeight - 130 + "px";
+      settingsMenuScrollBox.value.style.maxHeight =
+        window.innerHeight - 130 + "px";
     }
 
     function repositionSettingsMenu() {
@@ -249,7 +248,7 @@ function autoFocusToSearchBar(delay) {
             </div>
           </div>
           <div
-            id="settingsMenuScrollBox"
+            ref="settingsMenuScrollBox"
             class="overflow-auto text-sm scrollbarStyle"
           >
             <div class="py-2 border-b border-[#383838]">
