@@ -5,12 +5,17 @@ const props = defineProps({
     required: false,
     default: "",
   },
+  color: {
+    type: String,
+    required: false,
+    default: "#fff",
+  },
 });
 </script>
 
 <template>
-  <div :class="props.wrapperElementClassList">
-    <svg viewBox="0 0 24 24">
+  <div :class="props?.wrapperElementClassList">
+    <svg viewBox="0 0 24 24" :fill="props?.color">
       <g>
         <path d="M6,4l12,8L6,20V4z" />
       </g>
