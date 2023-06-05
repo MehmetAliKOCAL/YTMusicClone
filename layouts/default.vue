@@ -2,17 +2,17 @@
 let randomBg = Math.ceil(Math.random() * 7);
 let previousBg = [randomBg, randomBg, randomBg];
 
-watch(useRoute(), () => {
-  function changeBgImage() {
-    randomBg = Math.ceil(Math.random() * 7);
-    if (previousBg.includes(randomBg)) {
-      changeBgImage();
-    } else {
-      previousBg.shift();
-      previousBg.push(randomBg);
-    }
+function changeBgImage() {
+  randomBg = Math.ceil(Math.random() * 7);
+  if (previousBg.includes(randomBg)) {
+    changeBgImage();
+  } else {
+    previousBg.shift();
+    previousBg.push(randomBg);
   }
+}
 
+watch(useRoute(), () => {
   if (useRoute().path === "/") changeBgImage();
 });
 
@@ -102,6 +102,7 @@ function categories() {
       />
       <slot />
     </div>
+    <Player />
     <Footer />
   </div>
 </template>
