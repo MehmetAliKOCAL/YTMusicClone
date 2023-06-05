@@ -301,16 +301,18 @@ function splitItemsToArrays() {
               />
               <IconsPlay
                 v-wave="{
-                  color: 'black',
+                  color: 'white',
                   duration: 0.2,
                 }"
                 v-if="item.type === 'music'"
-                wrapperElementClassList="absolute bottom-5 right-6 p-[10px] w-11 bg-white/60 rounded-full invert-[100%] transition-all duration-300 transform hover:scale-[115%] hover:bg-white cursor-pointer"
+                wrapperElementClassList="absolute bottom-5 right-6 p-[10px] w-11 rounded-full bg-black/60 transition-all duration-300 transform hover:scale-[115%] hover:bg-black cursor-pointer"
+                color="#fff"
               />
             </div>
             <IconsPlay
               v-if="item.type !== 'music'"
-              wrapperElementClassList="absolute w-12 invert-[100%] pointer-events-none"
+              wrapperElementClassList="absolute w-12 pointer-events-none"
+              color="#fff"
           /></ClientOnly>
         </div>
 
@@ -377,10 +379,11 @@ function splitItemsToArrays() {
               >
                 <IconsPlay
                   v-wave="{
-                    color: 'black',
+                    color: 'white',
                     duration: 0.1,
                   }"
-                  :wrapperElementClassList="'p-1 w-8 rounded-full invert-[100%]'"
+                  wrapperElementClassList="p-1 w-8 rounded-full"
+                  color="#fff"
                 />
               </div>
             </ClientOnly>
