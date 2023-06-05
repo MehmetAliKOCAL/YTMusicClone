@@ -1,18 +1,27 @@
 <script setup>
+import { useGlobalVariablesStore } from "~/store/globalVariables";
 import { OnClickOutside } from "@vueuse/components";
 
+let searchResult = ref(null);
 const query = ref(encodeURIComponent(""));
-let searchResult = ref("");
 async function search() {
-  showSearch.value = false;
-  searchResult.value = await $fetch(`/api/search?query=${query.value}&limit=7`);
+  const response = await $fetch(`/api/search?query=${query.value}&limit=7`);
+  searchResult.value = response;
 }
 
+watch(query, () => {
+  search();
+});
+
 const elementThatBeingHovered = ref("");
+let settingsMenuScrollBox = ref(null);
 const showSettings = ref(false);
 const showSearch = ref(false);
 let scrollValue = ref(0);
-let settingsMenuScrollBox = ref(null);
+const globalVariables = useGlobalVariablesStore();
+globalVariables.$subscribe((mutation, state) => {
+  scrollValue.value = state.ScrollValueY;
+});
 
 const headerTabs = [
   {
@@ -110,10 +119,6 @@ onMounted(() => {
 
     resizeSettingsMenuScrollBox();
     repositionSettingsMenu();
-
-    window.addEventListener("scroll", () => {
-      scrollValue.value = window.scrollY;
-    });
 
     window.addEventListener("resize", () => {
       resizeSettingsMenuScrollBox();
@@ -309,7 +314,6 @@ function autoFocusToSearchBar(delay) {
             </button>
             <label for="searchBar" class="w-full">
               <input
-                @change="search()"
                 id="searchBar"
                 v-model="query"
                 type="text"
@@ -329,20 +333,21 @@ function autoFocusToSearchBar(delay) {
             </button>
           </div>
 
-          <div class="py-2">
+          <div v-if="searchResult !== null && show" class="py-2">
             <NuxtLink
               :to="`/search/${query}`"
               v-for="item in searchResult?.items"
               :key="item"
-              class="h-12 flex justify-between items-center hover:bg-white/10 min-w-full"
             >
-              <div class="flex">
+              <div
+                class="h-12 flex items-center hover:bg-white/10 min-w-full"
+                v-if="item.type === 'video'"
+              >
                 <IconsSearch wrapperElementClassList="w-6 h-6 mx-4" />
                 <p class="font-semibold line-clamp-1">
                   {{ item.title }}
                 </p>
               </div>
-              <!-- <IconsDelete class="w-6 mr-5" /> -->
             </NuxtLink>
           </div>
         </div>
