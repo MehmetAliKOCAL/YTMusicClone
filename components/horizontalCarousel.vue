@@ -3,6 +3,18 @@ import { useGlobalVariablesStore } from "~/store/globalVariables";
 import { useScroll, useElementSize } from "@vueuse/core";
 const globalVariables = useGlobalVariablesStore();
 
+function playSong(image, title, explicit, artists, id) {
+  globalVariables.$patch({
+    currentlyPlayingSong: {
+      image: image,
+      title: title,
+      explicit: explicit,
+      artists: artists,
+      id: id,
+    },
+  });
+}
+
 const hoveringSong = ref(null);
 const disliked = ref([]);
 const liked = ref([]);
@@ -278,6 +290,15 @@ function splitItemsToArrays() {
               class="ytsm:opacity-0 hover:opacity-100 w-full h-full absolute transition-all duration-300"
             >
               <button
+                @click="
+                  playSong(
+                    item.image,
+                    item.name,
+                    item.explicit,
+                    item.artists,
+                    item.id
+                  )
+                "
                 v-wave
                 class="w-full h-full"
                 :class="[
@@ -300,6 +321,15 @@ function splitItemsToArrays() {
                 wrapperElementClassList="w-10 invert-[100%] p-2 top-2 right-2 absolute rounded-full hover:bg-black/10 transition-colors duration-200 border border-transparent active:border-[#393939] cursor-pointer"
               />
               <IconsPlay
+                @click="
+                  playSong(
+                    item.image,
+                    item.name,
+                    item.explicit,
+                    item.artists,
+                    item.id
+                  )
+                "
                 v-wave="{
                   color: 'white',
                   duration: 0.2,
@@ -310,6 +340,15 @@ function splitItemsToArrays() {
               />
             </div>
             <IconsPlay
+              @click="
+                playSong(
+                  item.image,
+                  item.name,
+                  item.explicit,
+                  item.artists,
+                  item.id
+                )
+              "
               v-if="item.type !== 'music'"
               wrapperElementClassList="absolute w-12 pointer-events-none"
               color="#fff"
@@ -378,6 +417,15 @@ function splitItemsToArrays() {
                 class="top-0 flex w-12 h-full absolute items-center justify-center cursor-pointer bg-black/70"
               >
                 <IconsPlay
+                  @click="
+                    playSong(
+                      item.image,
+                      item.name,
+                      item.explicit,
+                      item.artists,
+                      item.id
+                    )
+                  "
                   v-wave="{
                     color: 'white',
                     duration: 0.1,
@@ -390,7 +438,18 @@ function splitItemsToArrays() {
 
             <div class="flex w-full relative truncate">
               <div class="truncate w-inherit">
-                <p class="truncate max-w-fit cursor-pointer">
+                <p
+                  @click="
+                    playSong(
+                      item.image,
+                      item.name,
+                      item.explicit,
+                      item.artists,
+                      item.id
+                    )
+                  "
+                  class="truncate max-w-fit cursor-pointer"
+                >
                   {{ item.name }}
                 </p>
                 <div class="flex space-x-1 text-[#B4B4B4]">
