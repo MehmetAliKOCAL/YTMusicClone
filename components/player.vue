@@ -71,7 +71,12 @@ onMounted(() => {
 });
 </script>
 <template>
-  <div class="w-full h-[72px] fixed bottom-0 text-white bg-[#202120]">
+  <div
+    class="w-full h-[72px] fixed bottom-0 text-white bg-[#202120] transform transition-all duration-300"
+    :class="[
+      !currentlyPlayingSong.hasOwnProperty('title') ? 'translate-y-[72px]' : '',
+    ]"
+  >
     <div id="youtube-player" class="absolute w-0 h-0 -z-100" />
     <div class="bg-[#4C4C4C] h-[2px]" />
     <div class="px-4 py-2 h-full flex items-center">
