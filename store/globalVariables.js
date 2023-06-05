@@ -5,5 +5,6 @@ export const useGlobalVariablesStore = defineStore("globalVariables", {
     showSongSettings: false,
     ScrollValueX: 0,
     ScrollValueY: 0,
+    currentlyPlayingSong: { id: "MonFx8pX6U4" },
   }),
 });
