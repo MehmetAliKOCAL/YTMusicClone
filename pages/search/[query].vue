@@ -1,7 +1,22 @@
 <script setup>
+import { useGlobalVariablesStore } from "~/store/globalVariables";
+const globalVariables = useGlobalVariablesStore();
+const elementBeingHovered = ref(null);
 const query = useRoute().params.query;
-let searchResult = ref(await $fetch(`/api/search?query=${query}&limit=20`));
 let tabSelected = ref(0);
+let searchResult = ref(await $fetch(`/api/search?query=${query}&limit=20`));
+
+function playSong(image, title, explicit, artists, id) {
+  globalVariables.$patch({
+    currentlyPlayingSong: {
+      image: image,
+      title: title,
+      explicit: explicit,
+      artists: artists,
+      id: id,
+    },
+  });
+}
 
 const categories = [
   {
@@ -61,21 +76,45 @@ const tabs = [{ text: "YT MUSIC" }, { text: "LIBRARY" }];
       >
         <div
           v-if="result === searchResult?.items[0]"
-          class="overflow-hidden rounded-lg relative h-32"
+          class="overflow-hidden rounded-md relative h-32"
         >
           <div
             :style="'background-image:url(' + result?.bestThumbnail?.url + ');'"
             class="bg-center bg-[length:200%] filter blur-3xl h-32 bg-red-900"
           />
           <div
-            class="z-10 top-0 left-5 h-full flex absolute justify-center items-center text-white space-x-5"
+            class="z-10 top-0 left-4 h-full flex absolute justify-center items-center text-white space-x-5"
           >
-            <img
-              :src="result?.author?.bestAvatar?.url"
-              :alt="result?.title"
-              width="90"
-              class="rounded-lg"
-            />
+            <div
+              @mouseenter="elementBeingHovered = result"
+              @mouseleave="elementBeingHovered = null"
+              @click="
+                playSong(
+                  result?.bestThumbnail?.url,
+                  result?.title,
+                  false,
+                  [{ name: result?.author?.name, link: '/' }],
+                  result?.id
+                )
+              "
+              class="relative cursor-pointer rounded-[4px] overflow-hidden"
+            >
+              <img
+                :src="result?.author?.bestAvatar?.url"
+                :alt="result?.title"
+                width="100"
+              />
+              <div
+                class="z-10 top-0 w-full h-full absolute flex justify-center items-center bg-black/70 transition-all duration-200"
+                :class="[
+                  elementBeingHovered === result
+                    ? 'opacity-100 visible'
+                    : 'opacity-0 invisible',
+                ]"
+              >
+                <IconsPlay wrapperElementClassList="w-8" />
+              </div>
+            </div>
             <div class="flex flex-col justify-center">
               <p class="text-2xl font-bold truncate">{{ result?.title }}</p>
               <div class="flex space-x-1 text-white/70">
@@ -90,9 +129,11 @@ const tabs = [{ text: "YT MUSIC" }, { text: "LIBRARY" }];
             </div>
           </div>
         </div>
-        <p>url: {{ result?.url }}</p>
-
-        <div v-if="result !== searchResult?.items[0]">
+        <div v-if="result !== searchResult?.items[0]" class="mt-96">
+          <p class="mb-10">
+            bu sayfanın tasarımı henüz hazır değil ve bu yazının altında kalan
+            arama sonuçlarını şimdilik oynatamazsın ;-(
+          </p>
           <p>{{ result?.type }}</p>
           <p>{{ result?.title }}</p>
           <p>{{ result?.id }}</p>
