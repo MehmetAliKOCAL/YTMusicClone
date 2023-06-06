@@ -100,9 +100,9 @@ const tabs = [{ text: "YT MUSIC" }, { text: "LIBRARY" }];
               class="relative cursor-pointer rounded-[4px] overflow-hidden"
             >
               <img
-                :src="result?.author?.bestAvatar?.url"
+                :src="result?.bestThumbnail?.url"
                 :alt="result?.title"
-                width="100"
+                class="w-[100px] h-[100px] object-cover object-center"
               />
               <div
                 class="z-10 top-0 w-full h-full absolute flex justify-center items-center bg-black/70 transition-all duration-200"
