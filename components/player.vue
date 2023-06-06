@@ -7,6 +7,7 @@ let currentPlayTime = ref(0);
 let videoDuration = ref(0);
 let isPlaying = ref(false);
 let songPlayingProgress = ref(null);
+let songVolume = ref(100);
 let elementBeingHovered = ref(null);
 
 function prepareMediaPlayer() {
@@ -14,6 +15,7 @@ function prepareMediaPlayer() {
     getVideoLoadPercentage();
     getVideoDuration();
     getCurrentPlayTime();
+    songVolume.value = getSongVolume();
   } else {
     resetPlayerData();
     setTimeout(() => {
@@ -84,6 +86,14 @@ function changePlayerState() {
   }
 }
 
+function getSongVolume() {
+  return ytPlayer.getVolume();
+}
+
+function changeSongVolume() {
+  ytPlayer.setVolume(songVolume.value);
+}
+
 function loadAndPlayVideo(videoID) {
   ytPlayer.loadVideoById(videoID, 0);
 }
@@ -131,7 +141,7 @@ onMounted(() => {
   <div
     class="w-full h-[72px] fixed bottom-0 text-white bg-[#202120] transform transition-all duration-300"
     :class="[
-      !currentlyPlayingSong.hasOwnProperty('title') ? 'translate-y-[72px]' : '',
+      !currentlyPlayingSong.hasOwnProperty('title') ? 'translate-y-[80px]' : '',
     ]"
   >
     <div id="youtube-player" class="absolute w-0 h-0 -z-100" />
@@ -154,7 +164,7 @@ onMounted(() => {
           step="0.1"
           ref="songPlayingProgress"
           :value="(currentPlayTime / videoDuration) * 100 || 0"
-          class="-mt-0.5 absolute"
+          class="-mt-0.5 absolute songPlayingProgress"
           :style="`background:linear-gradient(to right, red ${songPlayingProgress?.value}%, transparent ${songPlayingProgress?.value}%)`"
           :class="[
             elementBeingHovered === 'progressBar'
@@ -164,8 +174,9 @@ onMounted(() => {
         />
       </div>
     </div>
+
     <div class="px-4 py-2 h-full flex items-center">
-      <div class="flex items-center gap-x-6">
+      <div class="flex items-center gap-x-6 max-md:gap-x-2">
         <IconsPrevious
           @click="ytPlayer.previousVideo()"
           color="#fff"
@@ -196,8 +207,7 @@ onMounted(() => {
           wrapperElementClassList="w-6 cursor-pointer"
         />
       </div>
-
-      <p class="mx-4 text-xs text-white/50">
+      <p class="mx-4 text-xs text-white/50 shrink-0">
         {{
           (currentPlayTime - (currentPlayTime % 60)) / 60 +
           ":" +
@@ -210,16 +220,16 @@ onMounted(() => {
           ("0" + (videoDuration % 60)).slice(-2)
         }}
       </p>
-      <div class="w-16 flex justify-end">
+      <div class="w-16 flex justify-end max-md:hidden">
         <img
           :src="currentlyPlayingSong?.image"
           :alt="currentlyPlayingSong?.title"
           class="max-h-10 rounded-[3px]"
         />
       </div>
-      <div class="text-sm font-medium ml-4 leading-[18px]">
-        <p>{{ currentlyPlayingSong?.title }}</p>
-        <div class="flex">
+      <div class="text-sm font-medium ml-4 leading-[18px] truncate">
+        <p class="truncate">{{ currentlyPlayingSong?.title }}</p>
+        <div class="flex truncate">
           <NuxtLink
             v-for="artist in currentlyPlayingSong?.artists"
             :key="artist"
@@ -235,16 +245,25 @@ onMounted(() => {
           </NuxtLink>
         </div>
       </div>
+      <input
+        @input="changeSongVolume()"
+        type="range"
+        min="0"
+        max="100"
+        step="0.1"
+        v-model="songVolume"
+        class="volumeBar ml-4"
+      />
     </div>
   </div>
 </template>
 <style scoped>
-input[type="range"] {
+.songPlayingProgress {
   -webkit-appearance: none;
   appearance: none;
-  width: 100%;
   cursor: pointer;
   outline: none;
+  width: 100%;
   height: 2px;
   background: transparent;
 }
@@ -254,15 +273,15 @@ input[type="range"] {
   appearance: none;
   height: 10px;
   width: 10px;
-  background-color: red;
   border-radius: 50%;
+  background-color: red;
 }
 
 .defaultSliderThumb::-moz-range-thumb {
   height: 10px;
   width: 10px;
-  background-color: red;
   border-radius: 50%;
+  background-color: red;
 }
 
 .correctedSliderThumb::-webkit-slider-thumb {
@@ -270,14 +289,52 @@ input[type="range"] {
   appearance: none;
   height: 8px;
   width: 14px;
-  background-color: red;
   border-radius: 50%;
+  background-color: red;
 }
 
 .correctedSliderThumb::-moz-range-thumb {
   height: 8px;
   width: 14px;
-  background-color: red;
   border-radius: 50%;
+  background-color: red;
+}
+
+.volumeBar {
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+  outline: none;
+  width: 80px;
+  height: 2px;
+  background: white;
+}
+
+.volumeBar::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 12px;
+  width: 12px;
+  border-radius: 50%;
+  background-color: white;
+  outline: 10px solid rgba(255, 255, 255, 0.15);
+  transition: all 200ms;
+}
+
+.volumeBar::-webkit-slider-thumb:hover {
+  outline: 0px solid;
+}
+
+.volumeBar::-moz-range-thumb {
+  height: 12px;
+  width: 12spx;
+  border-radius: 50%;
+  background-color: white;
+  outline: 10px solid rgba(255, 255, 255, 0.15);
+  transition: all 200ms;
+}
+
+.volumeBar::-moz-range-thumb:hover {
+  outline: 0px solid;
 }
 </style>
