@@ -1,31 +1,76 @@
 <script setup>
 import { useGlobalVariablesStore } from "~/store/globalVariables";
 const globalVariables = useGlobalVariablesStore();
-const isPlaying = ref(false);
 let currentlyPlayingSong = ref("");
-let duration = ref(0);
-let currentTime = ref(0);
+let videoLoadPercentage = ref(0);
+let currentPlayTime = ref(0);
+let videoDuration = ref(0);
+let isPlaying = ref(false);
 
-globalVariables.$subscribe((mutation, state) => {
-  currentlyPlayingSong.value = state.currentlyPlayingSong;
-
-  watch(state.currentlyPlayingSong, () => {
-    ytPlayer.loadVideoById(currentlyPlayingSong.value.id, 0);
-    playOrPauseVideo();
+function prepareMediaPlayer() {
+  if (ytPlayer.getPlayerState() === 1) {
+    getVideoLoadPercentage();
+    getVideoDuration();
+    getCurrentPlayTime();
+  } else {
+    resetPlayerData();
     setTimeout(() => {
-      duration.value = ytPlayer.getDuration().toFixed(0);
-      getCurrentTime();
-    }, 1000);
-  });
-});
+      prepareMediaPlayer();
+    }, 500);
+  }
+}
 
-function getCurrentTime() {
-  currentTime.value = ytPlayer.getCurrentTime().toFixed();
+function resetPlayerData() {
+  videoDuration.value = 0;
+  currentPlayTime.value = 0;
+  videoLoadPercentage.value = 0;
+}
+
+function getVideoDuration() {
+  videoDuration.value = ytPlayer.getDuration().toFixed(0);
+}
+
+function getVideoLoadPercentage() {
+  videoLoadPercentage.value = ytPlayer.getVideoLoadedFraction() * 100;
   if (ytPlayer.getPlayerState() !== YT.PlayerState.ENDED) {
     setTimeout(() => {
-      getCurrentTime();
+      getVideoLoadPercentage();
     }, 1000);
   }
+}
+
+function getCurrentPlayTime() {
+  currentPlayTime.value = ytPlayer.getCurrentTime().toFixed();
+  if (ytPlayer.getPlayerState() !== YT.PlayerState.ENDED) {
+    setTimeout(() => {
+      getCurrentPlayTime();
+    }, 1000);
+  }
+}
+
+function playVideo() {
+  ytPlayer.playVideo();
+  isPlaying.value = true;
+}
+
+function pauseVideo() {
+  ytPlayer.pauseVideo();
+  isPlaying.value = false;
+}
+
+function changePlayerState() {
+  if (
+    ytPlayer.getPlayerState() === YT.PlayerState.PLAYING ||
+    ytPlayer.getPlayerState() === YT.PlayerState.BUFFERING
+  ) {
+    pauseVideo();
+  } else {
+    playVideo();
+  }
+}
+
+function loadAndPlayVideo(videoID) {
+  ytPlayer.loadVideoById(videoID, 0);
 }
 
 let ytPlayer;
@@ -45,7 +90,6 @@ function onYouTubeIframeAPIReady() {
       },
       onStateChange: (e) => {
         if (e.data === YT.PlayerState.ENDED) {
-          // CHANGE THE IMAGE OF THE SONG
           isPlaying.value = false;
         }
       },
@@ -53,23 +97,21 @@ function onYouTubeIframeAPIReady() {
   });
 }
 
-function playOrPauseVideo() {
-  if (
-    ytPlayer.getPlayerState() === YT.PlayerState.PLAYING ||
-    ytPlayer.getPlayerState() === YT.PlayerState.BUFFERING
-  ) {
-    ytPlayer.pauseVideo();
-    isPlaying.value = false;
-  } else {
-    ytPlayer.playVideo();
-    isPlaying.value = true;
-  }
-}
+globalVariables.$subscribe((mutations, states) => {
+  currentlyPlayingSong.value = states.currentlyPlayingSong;
+
+  watch(states.currentlyPlayingSong, () => {
+    loadAndPlayVideo(currentlyPlayingSong.value.id);
+    prepareMediaPlayer();
+    changePlayerState();
+  });
+});
 
 onMounted(() => {
   onYouTubeIframeAPIReady();
 });
 </script>
+
 <template>
   <div
     class="w-full h-[72px] fixed bottom-0 text-white bg-[#202120] transform transition-all duration-300"
@@ -78,7 +120,20 @@ onMounted(() => {
     ]"
   >
     <div id="youtube-player" class="absolute w-0 h-0 -z-100" />
-    <div class="bg-[#4C4C4C] h-[2px]" />
+    <div class="h-[2px] w-full bg-[#393938]">
+      <div
+        class="h-full bg-[#4C4C4C]"
+        :style="`width:${videoLoadPercentage}%`"
+      />
+      <input
+        type="range"
+        min="0"
+        max="100"
+        step="0.1"
+        :value="(currentPlayTime / videoDuration) * 100 || 0"
+        class="top-0 absolute"
+      />
+    </div>
     <div class="px-4 py-2 h-full flex items-center">
       <div class="flex items-center gap-x-6">
         <IconsPrevious
@@ -87,7 +142,7 @@ onMounted(() => {
           wrapperElementClassList="w-6 cursor-pointer"
         />
         <div
-          @click="playOrPauseVideo()"
+          @click="changePlayerState()"
           :data-video="currentlyPlayingSong?.id"
           data-autoplay="0"
           data-loop="1"
@@ -114,15 +169,15 @@ onMounted(() => {
 
       <p class="mx-4 text-xs text-white/50">
         {{
-          (currentTime - (currentTime % 60)) / 60 +
+          (currentPlayTime - (currentPlayTime % 60)) / 60 +
           ":" +
-          ("0" + (currentTime % 60)).slice(-2)
+          ("0" + (currentPlayTime % 60)).slice(-2)
         }}
         /
         {{
-          (duration - (duration % 60)) / 60 +
+          (videoDuration - (videoDuration % 60)) / 60 +
           ":" +
-          ("0" + (duration % 60)).slice(-2)
+          ("0" + (videoDuration % 60)).slice(-2)
         }}
       </p>
       <img
@@ -151,3 +206,31 @@ onMounted(() => {
     </div>
   </div>
 </template>
+<style scoped>
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  cursor: pointer;
+  outline: none;
+  overflow: hidden;
+  background-color: transparent;
+  height: 2px;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 2px;
+  width: 2px;
+  background-color: red;
+  box-shadow: -5002px 0 0 5000px red;
+}
+
+input[type="range"]::-moz-range-thumb {
+  height: 2px;
+  width: 2px;
+  background-color: red;
+  box-shadow: -5002px 0 0 5000px red;
+}
+</style>
