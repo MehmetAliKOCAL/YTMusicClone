@@ -86,7 +86,7 @@ function categories() {
       />
     </div>
     <Header class="relative z-20" />
-    <NuxtLoadingIndicator color="rgb(255,0,0)" :height="2" />
+    <NuxtLoadingIndicator color="red" :height="2" />
     <SongSettingsMenu />
     <div
       class="max-ytsm:px-4 max-ytlg:px-14 ytlg:max-w-[1040px] ytxl:max-w-[1255px] yt2xl:max-w-[1470px] mx-auto"

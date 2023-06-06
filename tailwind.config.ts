@@ -5,6 +5,7 @@ export default <Partial<Config>>{
       colors: {
         ytblack: "rgb(3,3,3)",
         ytgray: "rgb(129,129,129)",
+        ytred: "rgb(255,0,0)",
       },
       fontFamily: {
         robotoExt: ["Roboto", "sans-serif"],
