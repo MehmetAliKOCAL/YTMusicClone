@@ -1,6 +1,7 @@
 <script setup>
 import { useGlobalVariablesStore } from "~/store/globalVariables";
 const globalVariables = useGlobalVariablesStore();
+const audioPlayer = ref(null);
 let currentlyPlayingSong = ref("");
 let videoLoadPercentage = ref(0);
 let currentPlayTime = ref(0);
@@ -9,6 +10,7 @@ let isPlaying = ref(false);
 let songPlayingProgress = ref(null);
 let songVolume = ref(100);
 let elementBeingHovered = ref(null);
+let isMuted = ref(false);
 
 function prepareMediaPlayer() {
   if (ytPlayer.getPlayerState() === 1) {
@@ -90,8 +92,27 @@ function getSongVolume() {
   return ytPlayer.getVolume();
 }
 
-function changeSongVolume() {
-  ytPlayer.setVolume(songVolume.value);
+function changeSongVolume(volume) {
+  ytPlayer.setVolume(volume);
+  if (parseInt(volume) === 0) isMuted.value = true;
+  else isMuted.value = false;
+}
+
+function getIsMuted() {
+  return ytPlayer.isMuted();
+}
+
+function muteOrUnmute() {
+  if (getIsMuted()) {
+    ytPlayer.unMute();
+    songVolume.value = getSongVolume();
+  } else {
+    ytPlayer.mute();
+    songVolume.value = 0;
+  }
+  setTimeout(() => {
+    isMuted.value = getIsMuted();
+  }, 100);
 }
 
 function loadAndPlayVideo(videoID) {
@@ -100,14 +121,13 @@ function loadAndPlayVideo(videoID) {
 
 let ytPlayer;
 function onYouTubeIframeAPIReady() {
-  const element = document.querySelector("#youtube-audio");
   ytPlayer = new YT.Player("youtube-player", {
     height: "0",
     width: "0",
-    videoId: element.dataset.video,
+    videoId: audioPlayer.value.dataset.video,
     playerVars: {
-      autoplay: element.dataset.autoplay,
-      loop: element.dataset.loop,
+      autoplay: audioPlayer.value.dataset.autoplay,
+      loop: audioPlayer.value.dataset.loop,
     },
     events: {
       onReady: (e) => {
@@ -164,7 +184,7 @@ onMounted(() => {
           step="0.1"
           ref="songPlayingProgress"
           :value="(currentPlayTime / videoDuration) * 100 || 0"
-          class="-mt-0.5 absolute songPlayingProgress"
+          class="-mt-0.5 w-full h-[2px] absolute appearance-none cursor-pointer outline-none bg-transparent"
           :style="`background:linear-gradient(to right, red ${songPlayingProgress?.value}%, transparent ${songPlayingProgress?.value}%)`"
           :class="[
             elementBeingHovered === 'progressBar'
@@ -187,7 +207,7 @@ onMounted(() => {
           :data-video="currentlyPlayingSong?.id"
           data-autoplay="0"
           data-loop="1"
-          id="youtube-audio"
+          ref="audioPlayer"
         >
           <IconsPlay
             v-if="!isPlaying"
@@ -245,29 +265,36 @@ onMounted(() => {
           </NuxtLink>
         </div>
       </div>
-      <input
-        @input="changeSongVolume()"
-        type="range"
-        min="0"
-        max="100"
-        step="0.1"
-        v-model="songVolume"
-        class="volumeBar ml-4"
-      />
+      <div
+        @mouseenter="elementBeingHovered = 'sound'"
+        @mouseleave="elementBeingHovered = null"
+        class="flex items-center justify-center space-x-4"
+      >
+        <input
+          @input="changeSongVolume(songVolume)"
+          type="range"
+          min="0"
+          max="100"
+          step="0.1"
+          v-model="songVolume"
+          class="ml-4 w-20 h-[2px] volumeBar bg-white appearance-none cursor-pointer outline-none transition-all duration-200"
+          :class="[
+            elementBeingHovered === 'sound'
+              ? 'opacity-100 visible'
+              : 'opacity-0 invisible',
+          ]"
+        />
+        <IconsSound
+          @click="muteOrUnmute()"
+          color="rgba(255,255,255,0.4)"
+          class="w-7 cursor-pointer"
+          :muted="isMuted"
+        />
+      </div>
     </div>
   </div>
 </template>
 <style scoped>
-.songPlayingProgress {
-  -webkit-appearance: none;
-  appearance: none;
-  cursor: pointer;
-  outline: none;
-  width: 100%;
-  height: 2px;
-  background: transparent;
-}
-
 .defaultSliderThumb::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
@@ -298,16 +325,6 @@ onMounted(() => {
   width: 14px;
   border-radius: 50%;
   background-color: red;
-}
-
-.volumeBar {
-  -webkit-appearance: none;
-  appearance: none;
-  cursor: pointer;
-  outline: none;
-  width: 80px;
-  height: 2px;
-  background: white;
 }
 
 .volumeBar::-webkit-slider-thumb {
