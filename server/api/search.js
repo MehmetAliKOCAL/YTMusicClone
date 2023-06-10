@@ -1,4 +1,4 @@
-import ytsr from "ytsr";
+import ytsr from 'ytsr';
 
 export default defineEventHandler(async (event) => {
   const searchQuery = getQuery(event);

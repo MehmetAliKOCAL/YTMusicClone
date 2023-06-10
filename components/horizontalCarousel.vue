@@ -1,176 +1,181 @@
 <script setup>
-import { useGlobalVariablesStore } from "~/store/globalVariables";
-import { useScroll, useElementSize } from "@vueuse/core";
-const globalVariables = useGlobalVariablesStore();
+  import { useGlobalVariablesStore } from '~/store/globalVariables';
+  import { useScroll, useElementSize } from '@vueuse/core';
+  const globalVariables = useGlobalVariablesStore();
 
-function playSong(image, title, explicit, artists, id) {
-  globalVariables.$patch({
-    currentlyPlayingSong: {
-      image: image,
-      title: title,
-      explicit: explicit,
-      artists: artists,
-      id: id,
+  function playSong(image, title, explicit, artists, id) {
+    globalVariables.$patch({
+      currentlyPlayingSong: {
+        image: image,
+        title: title,
+        explicit: explicit,
+        artists: artists,
+        id: id,
+      },
+    });
+  }
+
+  const hoveringSong = ref(null);
+  const disliked = ref([]);
+  const liked = ref([]);
+
+  const carousel = ref(null);
+  const compactCarousel = ref(null);
+  const carouselWrapper = ref(null);
+
+  const { width: carouselWidth } = useElementSize(carousel);
+  const { width: carouselWrapperWidth } = useElementSize(carouselWrapper);
+  const { x: carouselScrollValue, arrivedState: isFullyScrolled } = useScroll(
+    carousel,
+    {
+      behavior: 'smooth',
+    }
+  );
+
+  const { width: compactCarouselWidth } = useElementSize(compactCarousel);
+  const {
+    x: compactCarouselScrollValue,
+    arrivedState: isCompactFullyScrolled,
+  } = useScroll(compactCarousel, {
+    behavior: 'smooth',
+  });
+
+  const props = defineProps({
+    image: {
+      type: Object,
+      required: false,
+      default: { showImage: false, link: '' },
+    },
+    title: {
+      type: Object,
+      required: false,
+      default: { text: '', redirect: '/' },
+    },
+    subtitle: {
+      type: String,
+      required: false,
+      default: '',
+    },
+    items: {
+      type: Array,
+      required: true,
+      default: [],
+    },
+    showMore: {
+      type: Boolean,
+      required: false,
+      defaut: true,
+    },
+    isCompact: {
+      type: Boolean,
+      required: false,
+      default: false,
     },
   });
-}
 
-const hoveringSong = ref(null);
-const disliked = ref([]);
-const liked = ref([]);
+  function getElementPosition(element) {
+    if (process.client) {
+      const position = {
+        inPage: {
+          top: element.getBoundingClientRect().top + window.scrollY,
+          bottom: element.getBoundingClientRect().bottom + window.scrollY,
+          left: element.getBoundingClientRect().left + window.scrollX,
+          right: element.getBoundingClientRect().right + window.scrollX,
+        },
+        inViewport: {
+          top: element.getBoundingClientRect().top,
+          bottom: element.getBoundingClientRect().bottom,
+          left: element.getBoundingClientRect().left,
+          right: element.getBoundingClientRect().right,
+        },
+      };
 
-const carousel = ref(null);
-const compactCarousel = ref(null);
-const carouselWrapper = ref(null);
-
-const { width: carouselWidth } = useElementSize(carousel);
-const { width: carouselWrapperWidth } = useElementSize(carouselWrapper);
-const { x: carouselScrollValue, arrivedState: isFullyScrolled } = useScroll(
-  carousel,
-  {
-    behavior: "smooth",
+      return position;
+    }
   }
-);
 
-const { width: compactCarouselWidth } = useElementSize(compactCarousel);
-const { x: compactCarouselScrollValue, arrivedState: isCompactFullyScrolled } =
-  useScroll(compactCarousel, {
-    behavior: "smooth",
-  });
+  function repositionSettingsMenu() {
+    if (process.client) {
+      const settingsMenu = document.getElementById('songSettingsMenu');
+      const settingsButtonPosition = getElementPosition(event.currentTarget);
 
-const props = defineProps({
-  image: {
-    type: Object,
-    required: false,
-    default: { showImage: false, link: "" },
-  },
-  title: {
-    type: Object,
-    required: false,
-    default: { text: "", redirect: "/" },
-  },
-  subtitle: {
-    type: String,
-    required: false,
-    default: "",
-  },
-  items: {
-    type: Array,
-    required: true,
-    default: [],
-  },
-  showMore: {
-    type: Boolean,
-    required: false,
-    defaut: true,
-  },
-  isCompact: {
-    type: Boolean,
-    required: false,
-    default: false,
-  },
-});
+      if (
+        window.innerHeight - settingsButtonPosition.inViewport.bottom >
+        settingsMenu.offsetHeight
+      ) {
+        settingsMenu.style.top = settingsButtonPosition.inPage.bottom + 'px';
+      } else {
+        settingsMenu.style.bottom = 5 + 'px';
+      }
 
-function getElementPosition(element) {
-  if (process.client) {
-    const position = {
-      inPage: {
-        top: element.getBoundingClientRect().top + window.scrollY,
-        bottom: element.getBoundingClientRect().bottom + window.scrollY,
-        left: element.getBoundingClientRect().left + window.scrollX,
-        right: element.getBoundingClientRect().right + window.scrollX,
-      },
-      inViewport: {
-        top: element.getBoundingClientRect().top,
-        bottom: element.getBoundingClientRect().bottom,
-        left: element.getBoundingClientRect().left,
-        right: element.getBoundingClientRect().right,
-      },
-    };
-
-    return position;
+      if (settingsButtonPosition.inViewport.right > settingsMenu.offsetWidth) {
+        settingsMenu.style.left =
+          settingsButtonPosition.inViewport.right -
+          settingsMenu.offsetWidth +
+          'px';
+      } else {
+        settingsMenu.style.left = settingsButtonPosition.inViewport.left + 'px';
+      }
+    }
   }
-}
 
-function repositionSettingsMenu() {
-  if (process.client) {
-    const settingsMenu = document.getElementById("songSettingsMenu");
-    const settingsButtonPosition = getElementPosition(event.currentTarget);
+  function resizeSettingsMenu() {
+    if (process.client) {
+      const settingsMenu = document.getElementById('songSettingsMenu');
+      const headerHeight =
+        document.getElementsByTagName('header')[0].offsetHeight;
 
-    if (
-      window.innerHeight - settingsButtonPosition.inViewport.bottom >
-      settingsMenu.offsetHeight
-    ) {
-      settingsMenu.style.top = settingsButtonPosition.inPage.bottom + "px";
+      if (settingsMenu.offsetHeight > window.innerHeight - headerHeight) {
+        settingsMenu.style.height = window.innerHeight - headerHeight + 'px';
+      } else {
+        settingsMenu.style.height = 'fit-content';
+      }
+    }
+  }
+
+  function toggleLikeState(array, counterArray, element) {
+    if (counterArray.includes(element)) {
+      const index = counterArray.indexOf(element);
+      counterArray.splice(index, 1);
+      array.push(element);
+    } else if (array.includes(element)) {
+      const index = array.indexOf(element);
+      array.splice(index, 1);
     } else {
-      settingsMenu.style.bottom = 5 + "px";
-    }
-
-    if (settingsButtonPosition.inViewport.right > settingsMenu.offsetWidth) {
-      settingsMenu.style.left =
-        settingsButtonPosition.inViewport.right -
-        settingsMenu.offsetWidth +
-        "px";
-    } else {
-      settingsMenu.style.left = settingsButtonPosition.inViewport.left + "px";
+      array.push(element);
     }
   }
-}
 
-function resizeSettingsMenu() {
-  if (process.client) {
-    const settingsMenu = document.getElementById("songSettingsMenu");
-    const headerHeight =
-      document.getElementsByTagName("header")[0].offsetHeight;
+  function splitItemsToArrays() {
+    const items = props.items;
+    const quaternaryCount = Math.floor(items.length / 4);
+    const leftoverCount = items.length % 4;
 
-    if (settingsMenu.offsetHeight > window.innerHeight - headerHeight) {
-      settingsMenu.style.height = window.innerHeight - headerHeight + "px";
-    } else {
-      settingsMenu.style.height = "fit-content";
+    const mainArray = [];
+    for (let x = 0; x < quaternaryCount * 4; x += 4) {
+      const altArray = [];
+      for (let z = 0; z < 4; z++) {
+        altArray.push(items[z + x]);
+      }
+      mainArray.push(altArray);
     }
-  }
-}
 
-function toggleLikeState(array, counterArray, element) {
-  if (counterArray.includes(element)) {
-    const index = counterArray.indexOf(element);
-    counterArray.splice(index, 1);
-    array.push(element);
-  } else if (array.includes(element)) {
-    const index = array.indexOf(element);
-    array.splice(index, 1);
-  } else {
-    array.push(element);
-  }
-}
-
-function splitItemsToArrays() {
-  const items = props.items;
-  const quaternaryCount = Math.floor(items.length / 4);
-  const leftoverCount = items.length % 4;
-
-  const mainArray = [];
-  for (let x = 0; x < quaternaryCount * 4; x += 4) {
-    const altArray = [];
-    for (let z = 0; z < 4; z++) {
-      altArray.push(items[z + x]);
+    const leftoverArray = [];
+    for (let y = 0; y < leftoverCount; y++) {
+      leftoverArray.push(items[items.length - 1 - y]);
     }
-    mainArray.push(altArray);
-  }
+    mainArray.push(leftoverArray);
 
-  const leftoverArray = [];
-  for (let y = 0; y < leftoverCount; y++) {
-    leftoverArray.push(items[items.length - 1 - y]);
+    return mainArray;
   }
-  mainArray.push(leftoverArray);
-
-  return mainArray;
-}
 </script>
 
 <template>
   <div class="text-white w-full overflow-hidden ytlg:mt-7 yt3xl:mt-9">
-    <div ref="carouselWrapper" class="flex items-end justify-between">
+    <div
+      ref="carouselWrapper"
+      class="flex items-end justify-between"
+    >
       <div class="flex items-center">
         <ClientOnly>
           <NuxtLink
@@ -364,7 +369,10 @@ function splitItemsToArrays() {
         <div class="flex space-x-1 text-[#B4B4B4]">
           <IconsExplicit v-if="item?.explicit" />
           <div class="w-full truncate space-x-1">
-            <p v-if="item?.album" class="min-w-max inline">
+            <p
+              v-if="item?.album"
+              class="min-w-max inline"
+            >
               {{ item.album }} •
             </p>
             <NuxtLink
@@ -375,11 +383,14 @@ function splitItemsToArrays() {
               >{{
                 artist.name +
                 (item.artists.indexOf(artist) !== item.artists.length - 1
-                  ? ","
-                  : "")
+                  ? ','
+                  : '')
               }}
             </NuxtLink>
-            <p v-if="item?.views" class="min-w-max inline">
+            <p
+              v-if="item?.views"
+              class="min-w-max inline"
+            >
               • {{ item.views }} views
             </p>
           </div>
@@ -464,8 +475,8 @@ function splitItemsToArrays() {
                         artist.name +
                         (item.artists.indexOf(artist) !==
                         item.artists.length - 1
-                          ? ","
-                          : "")
+                          ? ','
+                          : '')
                       }}
                     </NuxtLink>
                     <p class="min-w-max inline">•</p>
@@ -484,13 +495,19 @@ function splitItemsToArrays() {
                     >
                       {{ item.album }}
                     </p>
-                    <p v-else class="min-w-max inline">
+                    <p
+                      v-else
+                      class="min-w-max inline"
+                    >
                       {{ item.views }} views
                     </p>
                   </div>
                 </div>
               </div>
-              <div v-if="hoveringSong === item.name" class="ml-2 flex gap-x-2">
+              <div
+                v-if="hoveringSong === item.name"
+                class="ml-2 flex gap-x-2"
+              >
                 <ClientOnly>
                   <IconsDislike
                     v-wave="{
@@ -533,9 +550,9 @@ function splitItemsToArrays() {
   </div>
 </template>
 <style scoped>
-.scrollbarStyle::-webkit-scrollbar,
-.scrollbarStyle::-webkit-scrollbar-thumb {
-  background-color: transparent;
-  border-color: transparent;
-}
+  .scrollbarStyle::-webkit-scrollbar,
+  .scrollbarStyle::-webkit-scrollbar-thumb {
+    background-color: transparent;
+    border-color: transparent;
+  }
 </style>

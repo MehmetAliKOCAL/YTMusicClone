@@ -1,11 +1,11 @@
 <script setup>
-const props = defineProps({
-  wrapperElementClassList: {
-    type: String,
-    required: false,
-    default: "",
-  },
-});
+  const props = defineProps({
+    wrapperElementClassList: {
+      type: String,
+      required: false,
+      default: '',
+    },
+  });
 </script>
 <template>
   <div :class="props.wrapperElementClassList">

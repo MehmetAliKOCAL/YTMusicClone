@@ -1,28 +1,28 @@
 <script setup>
-import { useScroll } from "@vueuse/core";
-const componentWrapper = ref(null);
-const { isScrolling } = useScroll(componentWrapper);
+  import { useScroll } from '@vueuse/core';
+  const componentWrapper = ref(null);
+  const { isScrolling } = useScroll(componentWrapper);
 
-const props = defineProps({
-  categories: {
-    type: Array,
-    required: true,
-    default: [],
-  },
-});
+  const props = defineProps({
+    categories: {
+      type: Array,
+      required: true,
+      default: [],
+    },
+  });
 
-function hideInactiveScrollbar() {
-  componentWrapper.value.classList.replace("hideScrollbar", "showScrollbar");
+  function hideInactiveScrollbar() {
+    componentWrapper.value.classList.replace('hideScrollbar', 'showScrollbar');
 
-  setTimeout(() => {
-    if (isScrolling !== false) {
-      componentWrapper.value.classList.replace(
-        "showScrollbar",
-        "hideScrollbar"
-      );
-    }
-  }, 500);
-}
+    setTimeout(() => {
+      if (isScrolling !== false) {
+        componentWrapper.value.classList.replace(
+          'showScrollbar',
+          'hideScrollbar'
+        );
+      }
+    }, 500);
+  }
 </script>
 
 <template>
@@ -48,26 +48,26 @@ function hideInactiveScrollbar() {
 </template>
 
 <style scoped>
-.showScrollbar {
-  border-color: rgba(255, 255, 255, 0.2);
-  transition-duration: 0ms;
-}
+  .showScrollbar {
+    border-color: rgba(255, 255, 255, 0.2);
+    transition-duration: 0ms;
+  }
 
-.hideScrollbar {
-  border-color: rgba(255, 255, 255, 0);
-  transition-duration: 500ms;
-}
+  .hideScrollbar {
+    border-color: rgba(255, 255, 255, 0);
+    transition-duration: 500ms;
+  }
 
-.scrollbarStyle::-webkit-scrollbar {
-  height: 3px;
-  background-color: transparent;
-  border: transparent;
-}
+  .scrollbarStyle::-webkit-scrollbar {
+    height: 3px;
+    background-color: transparent;
+    border: transparent;
+  }
 
-.scrollbarStyle::-webkit-scrollbar-thumb {
-  border-color: inherit;
-  border-right-style: inset;
-  border-right-width: 100vw;
-  background-color: transparent;
-}
+  .scrollbarStyle::-webkit-scrollbar-thumb {
+    border-color: inherit;
+    border-right-style: inset;
+    border-right-width: 100vw;
+    background-color: transparent;
+  }
 </style>

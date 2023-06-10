@@ -1,11 +1,11 @@
 <script setup>
-const props = defineProps({
-  elementThatBeingHovered: {
-    type: String,
-    required: true,
-    default: "",
-  },
-});
+  const props = defineProps({
+    elementThatBeingHovered: {
+      type: String,
+      required: true,
+      default: '',
+    },
+  });
 </script>
 
 <template>

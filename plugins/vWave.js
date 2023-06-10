@@ -1,9 +1,9 @@
-import VWave from "v-wave";
+import VWave from 'v-wave';
 
 export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.vueApp.use(VWave, {
-    colors: "white",
+    colors: 'white',
     initialOpacity: 0.2,
-    easing: "ease-in",
+    easing: 'ease-in',
   });
 });

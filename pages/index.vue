@@ -1,5 +1,5 @@
 <script setup>
-import songs from "/utilities/songs.json";
+  import songs from '/utilities/songs.json';
 </script>
 
 <template>

@@ -1,140 +1,140 @@
 <script setup>
-import { useGlobalVariablesStore } from "~/store/globalVariables";
-import { OnClickOutside } from "@vueuse/components";
+  import { useGlobalVariablesStore } from '~/store/globalVariables';
+  import { OnClickOutside } from '@vueuse/components';
 
-let searchResult = ref(null);
-const query = ref(encodeURIComponent(""));
-async function search() {
-  const response = await $fetch(`/api/search?query=${query.value}&limit=7`);
-  searchResult.value = response;
-}
+  let searchResult = ref(null);
+  const query = ref(encodeURIComponent(''));
+  async function search() {
+    const response = await $fetch(`/api/search?query=${query.value}&limit=7`);
+    searchResult.value = response;
+  }
 
-watch(query, () => {
-  search();
-});
+  watch(query, () => {
+    search();
+  });
 
-const elementThatBeingHovered = ref("");
-let settingsMenuScrollBox = ref(null);
-const showSettings = ref(false);
-const showSearch = ref(false);
-let scrollValue = ref(0);
-const globalVariables = useGlobalVariablesStore();
-globalVariables.$subscribe((mutation, state) => {
-  scrollValue.value = state.ScrollValueY;
-});
+  const elementThatBeingHovered = ref('');
+  let settingsMenuScrollBox = ref(null);
+  const showSettings = ref(false);
+  const showSearch = ref(false);
+  let scrollValue = ref(0);
+  const globalVariables = useGlobalVariablesStore();
+  globalVariables.$subscribe((mutation, state) => {
+    scrollValue.value = state.ScrollValueY;
+  });
 
-const headerTabs = [
-  {
-    text: "Home",
-    link: "/",
-    icon: "home",
-  },
-  {
-    text: "Explore",
-    link: "/explore",
-    icon: "explore",
-  },
-  {
-    text: "Library",
-    link: "/library",
-    icon: "library",
-  },
-  {
-    text: "Upgrade",
-    link: "/upgrade",
-    icon: "upgrade",
-  },
-];
+  const headerTabs = [
+    {
+      text: 'Home',
+      link: '/',
+      icon: 'home',
+    },
+    {
+      text: 'Explore',
+      link: '/explore',
+      icon: 'explore',
+    },
+    {
+      text: 'Library',
+      link: '/library',
+      icon: 'library',
+    },
+    {
+      text: 'Upgrade',
+      link: '/upgrade',
+      icon: 'upgrade',
+    },
+  ];
 
-const settingsMenuTabs = [
-  {
-    text: "Your channel",
-    link: "/",
-    icon: "yourChannel",
-  },
-  {
-    text: "Get Music Premium",
-    link: "/",
-    icon: "getMusicPremium",
-  },
-  {
-    text: "Switch account",
-    link: "/",
-    icon: "switchAccount",
-  },
-  {
-    text: "Sign out",
-    link: "/",
-    icon: "signOut",
-  },
-  {
-    text: "Upload music",
-    link: "/",
-    icon: "uploadMusic",
-  },
-  {
-    text: "History",
-    link: "/",
-    icon: "history",
-  },
-  {
-    text: "Settings",
-    link: "/",
-    icon: "settings",
-  },
-  {
-    text: "Terms & privacy policy",
-    link: "/",
-    icon: "termsAndPrivacy",
-  },
-  {
-    text: "Help",
-    link: "/",
-    icon: "help",
-  },
-  {
-    text: "Send feedback",
-    link: "/",
-    icon: "sendFeedback",
-  },
-];
+  const settingsMenuTabs = [
+    {
+      text: 'Your channel',
+      link: '/',
+      icon: 'yourChannel',
+    },
+    {
+      text: 'Get Music Premium',
+      link: '/',
+      icon: 'getMusicPremium',
+    },
+    {
+      text: 'Switch account',
+      link: '/',
+      icon: 'switchAccount',
+    },
+    {
+      text: 'Sign out',
+      link: '/',
+      icon: 'signOut',
+    },
+    {
+      text: 'Upload music',
+      link: '/',
+      icon: 'uploadMusic',
+    },
+    {
+      text: 'History',
+      link: '/',
+      icon: 'history',
+    },
+    {
+      text: 'Settings',
+      link: '/',
+      icon: 'settings',
+    },
+    {
+      text: 'Terms & privacy policy',
+      link: '/',
+      icon: 'termsAndPrivacy',
+    },
+    {
+      text: 'Help',
+      link: '/',
+      icon: 'help',
+    },
+    {
+      text: 'Send feedback',
+      link: '/',
+      icon: 'sendFeedback',
+    },
+  ];
 
-onMounted(() => {
-  if (process.client) {
-    function resizeSettingsMenuScrollBox() {
-      settingsMenuScrollBox.value.style.maxHeight =
-        window.innerHeight - 130 + "px";
-    }
-
-    function repositionSettingsMenu() {
-      let settingsMenu = document.getElementById("settingsMenu").style;
-      if (window.innerHeight < 580) {
-        settingsMenu.top = "20px";
-        settingsMenu.right = "45px";
-      } else {
-        settingsMenu.top = "45px";
-        settingsMenu.right = "16px";
+  onMounted(() => {
+    if (process.client) {
+      function resizeSettingsMenuScrollBox() {
+        settingsMenuScrollBox.value.style.maxHeight =
+          window.innerHeight - 130 + 'px';
       }
-    }
 
-    resizeSettingsMenuScrollBox();
-    repositionSettingsMenu();
+      function repositionSettingsMenu() {
+        let settingsMenu = document.getElementById('settingsMenu').style;
+        if (window.innerHeight < 580) {
+          settingsMenu.top = '20px';
+          settingsMenu.right = '45px';
+        } else {
+          settingsMenu.top = '45px';
+          settingsMenu.right = '16px';
+        }
+      }
 
-    window.addEventListener("resize", () => {
       resizeSettingsMenuScrollBox();
       repositionSettingsMenu();
-    });
-  }
-});
 
-function autoFocusToSearchBar(delay) {
-  if (process.client && showSearch) {
-    const searchBar = document.getElementById("searchBar");
-    setTimeout(() => {
-      searchBar.focus();
-    }, delay);
+      window.addEventListener('resize', () => {
+        resizeSettingsMenuScrollBox();
+        repositionSettingsMenu();
+      });
+    }
+  });
+
+  function autoFocusToSearchBar(delay) {
+    if (process.client && showSearch) {
+      const searchBar = document.getElementById('searchBar');
+      setTimeout(() => {
+        searchBar.focus();
+      }, delay);
+    }
   }
-}
 </script>
 
 <template>
@@ -247,7 +247,9 @@ function autoFocusToSearchBar(delay) {
             <div class="cursor-default">
               <p class="leading-5">GwynDev</p>
               <p class="mb-1">@TearsOfaPessimist</p>
-              <NuxtLink to="/" class="text-[#3EA6FF] text-sm"
+              <NuxtLink
+                to="/"
+                class="text-[#3EA6FF] text-sm"
                 >Manage your Google Account</NuxtLink
               >
             </div>
@@ -270,7 +272,10 @@ function autoFocusToSearchBar(delay) {
               >
                 <div class="flex items-center">
                   <div class="px-4">
-                    <IconRenderer :iconName="tab.icon" class="w-6" />
+                    <IconRenderer
+                      :iconName="tab.icon"
+                      class="w-6"
+                    />
                   </div>
                   <p>{{ tab.text }}</p>
                 </div>
@@ -289,7 +294,10 @@ function autoFocusToSearchBar(delay) {
                 :key="tab.text"
                 :to="tab.link"
                 ><div class="px-4">
-                  <IconRenderer :iconName="tab.icon" class="w-6" />
+                  <IconRenderer
+                    :iconName="tab.icon"
+                    class="w-6"
+                  />
                 </div>
                 <p>{{ tab.text }}</p>
               </NuxtLink>
@@ -309,10 +317,16 @@ function autoFocusToSearchBar(delay) {
           class="w-[95%] ytsm:w-[560px] ytmd:w-[720px] ytlg:w-[870px] absolute top-2 bg-[#212121] border border-[#333] rounded-sm"
         >
           <div class="flex border-b border-[#333]">
-            <button @click="showSearch = false" class="px-4">
+            <button
+              @click="showSearch = false"
+              class="px-4"
+            >
               <IconsBackArrow />
             </button>
-            <label for="searchBar" class="w-full">
+            <label
+              for="searchBar"
+              class="w-full"
+            >
               <input
                 id="searchBar"
                 v-model="query"
@@ -333,7 +347,10 @@ function autoFocusToSearchBar(delay) {
             </button>
           </div>
 
-          <div v-if="searchResult !== null && show" class="py-2">
+          <div
+            v-if="searchResult !== null && show"
+            class="py-2"
+          >
             <NuxtLink
               :to="`/search/${query}`"
               v-for="item in searchResult?.items"
@@ -357,13 +374,13 @@ function autoFocusToSearchBar(delay) {
 </template>
 
 <style scoped>
-.scrollbarStyle::-webkit-scrollbar {
-  width: 8px;
-  background-color: #282828;
-  border: none;
-}
+  .scrollbarStyle::-webkit-scrollbar {
+    width: 8px;
+    background-color: #282828;
+    border: none;
+  }
 
-.scrollbarStyle::-webkit-scrollbar-thumb {
-  background-color: #616160;
-}
+  .scrollbarStyle::-webkit-scrollbar-thumb {
+    background-color: #616160;
+  }
 </style>

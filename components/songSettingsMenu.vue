@@ -1,40 +1,40 @@
 <script setup>
-import { useGlobalVariablesStore } from "~/store/globalVariables";
-import { OnClickOutside } from "@vueuse/components";
-const globalVariables = useGlobalVariablesStore();
+  import { useGlobalVariablesStore } from '~/store/globalVariables';
+  import { OnClickOutside } from '@vueuse/components';
+  const globalVariables = useGlobalVariablesStore();
 
-const songSettings = [
-  {
-    text: "Start radio",
-    link: "/",
-    icon: "startRadio",
-  },
-  {
-    text: "Play next",
-    link: "/",
-    icon: "playNext",
-  },
-  {
-    text: "Add to queue",
-    link: "/",
-    icon: "addToQueue",
-  },
-  {
-    text: "Remove from liked songs",
-    link: "/",
-    icon: "removeFromLikedSongs",
-  },
-  {
-    text: "Add to playlist",
-    link: "/",
-    icon: "addToPlaylist",
-  },
-  {
-    text: "Share",
-    link: "/",
-    icon: "share",
-  },
-];
+  const songSettings = [
+    {
+      text: 'Start radio',
+      link: '/',
+      icon: 'startRadio',
+    },
+    {
+      text: 'Play next',
+      link: '/',
+      icon: 'playNext',
+    },
+    {
+      text: 'Add to queue',
+      link: '/',
+      icon: 'addToQueue',
+    },
+    {
+      text: 'Remove from liked songs',
+      link: '/',
+      icon: 'removeFromLikedSongs',
+    },
+    {
+      text: 'Add to playlist',
+      link: '/',
+      icon: 'addToPlaylist',
+    },
+    {
+      text: 'Share',
+      link: '/',
+      icon: 'share',
+    },
+  ];
 </script>
 
 <template>

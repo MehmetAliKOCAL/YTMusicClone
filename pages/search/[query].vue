@@ -1,51 +1,51 @@
 <script setup>
-import { useGlobalVariablesStore } from "~/store/globalVariables";
-const globalVariables = useGlobalVariablesStore();
-const elementBeingHovered = ref(null);
-const query = useRoute().params.query;
-let tabSelected = ref(0);
-let searchResult = ref(await $fetch(`/api/search?query=${query}&limit=20`));
+  import { useGlobalVariablesStore } from '~/store/globalVariables';
+  const globalVariables = useGlobalVariablesStore();
+  const elementBeingHovered = ref(null);
+  const query = useRoute().params.query;
+  let tabSelected = ref(0);
+  let searchResult = ref(await $fetch(`/api/search?query=${query}&limit=20`));
 
-function playSong(image, title, explicit, artists, id) {
-  globalVariables.$patch({
-    currentlyPlayingSong: {
-      image: image,
-      title: title,
-      explicit: explicit,
-      artists: artists,
-      id: id,
+  function playSong(image, title, explicit, artists, id) {
+    globalVariables.$patch({
+      currentlyPlayingSong: {
+        image: image,
+        title: title,
+        explicit: explicit,
+        artists: artists,
+        id: id,
+      },
+    });
+  }
+
+  const categories = [
+    {
+      name: 'Featured playlists',
+      link: '/',
     },
-  });
-}
+    {
+      name: 'Songs',
+      link: '/',
+    },
+    {
+      name: 'Vides',
+      link: '/',
+    },
+    {
+      name: 'Artists',
+      link: '/',
+    },
+    {
+      name: 'Community playlists',
+      link: '/',
+    },
+    {
+      name: 'Albums',
+      link: '/',
+    },
+  ];
 
-const categories = [
-  {
-    name: "Featured playlists",
-    link: "/",
-  },
-  {
-    name: "Songs",
-    link: "/",
-  },
-  {
-    name: "Vides",
-    link: "/",
-  },
-  {
-    name: "Artists",
-    link: "/",
-  },
-  {
-    name: "Community playlists",
-    link: "/",
-  },
-  {
-    name: "Albums",
-    link: "/",
-  },
-];
-
-const tabs = [{ text: "YT MUSIC" }, { text: "LIBRARY" }];
+  const tabs = [{ text: 'YT MUSIC' }, { text: 'LIBRARY' }];
 </script>
 <template>
   <main class="mx-auto max-w-[850px]">
@@ -67,7 +67,10 @@ const tabs = [{ text: "YT MUSIC" }, { text: "LIBRARY" }];
       </button>
     </div>
     <div v-if="tabSelected === 0">
-      <Categories :categories="categories" class="my-1.5" />
+      <Categories
+        :categories="categories"
+        class="my-1.5"
+      />
       <h1 class="text-white font-black text-2xl mb-4">Top result</h1>
       <div
         class="text-white"
@@ -129,7 +132,10 @@ const tabs = [{ text: "YT MUSIC" }, { text: "LIBRARY" }];
             </div>
           </div>
         </div>
-        <div v-if="result !== searchResult?.items[0]" class="mt-96">
+        <div
+          v-if="result !== searchResult?.items[0]"
+          class="mt-96"
+        >
           <p class="mb-10">
             bu sayfanın tasarımı henüz hazır değil ve bu yazının altında kalan
             arama sonuçlarını şimdilik oynatamazsın ;-(
@@ -139,8 +145,14 @@ const tabs = [{ text: "YT MUSIC" }, { text: "LIBRARY" }];
           <p>{{ result?.id }}</p>
           <p>url: {{ result?.url }}</p>
           <p>author: {{ result?.author?.name }}</p>
-          <img :src="result?.author?.bestAvatar?.url" alt="" />
-          <img :src="result?.bestThumbnail?.url" :alt="result?.title" />
+          <img
+            :src="result?.author?.bestAvatar?.url"
+            alt=""
+          />
+          <img
+            :src="result?.bestThumbnail?.url"
+            :alt="result?.title"
+          />
         </div>
       </div>
     </div>

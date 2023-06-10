@@ -1,16 +1,16 @@
 <script setup>
-const props = defineProps({
-  elementThatBeingHovered: {
-    type: String,
-    required: false,
-    default: "",
-  },
-  wrapperElementClassList: {
-    type: String,
-    required: false,
-    default: "",
-  },
-});
+  const props = defineProps({
+    elementThatBeingHovered: {
+      type: String,
+      required: false,
+      default: '',
+    },
+    wrapperElementClassList: {
+      type: String,
+      required: false,
+      default: '',
+    },
+  });
 </script>
 
 <template>

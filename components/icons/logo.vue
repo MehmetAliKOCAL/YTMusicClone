@@ -1,6 +1,16 @@
 <template>
-  <svg class="ytsm:hidden" width="24" height="24" fill="none">
-    <circle cx="12" cy="12" r="12" fill="red" />
+  <svg
+    class="ytsm:hidden"
+    width="24"
+    height="24"
+    fill="none"
+  >
+    <circle
+      cx="12"
+      cy="12"
+      r="12"
+      fill="red"
+    />
     <ellipse
       cx="12.18"
       cy="12"
@@ -10,10 +20,24 @@
       stroke="#fff"
       stroke-width="1.2"
     />
-    <path d="M9.744 15.545l6.327-3.544-6.327-3.546v7.09z" fill="#fff" />
+    <path
+      d="M9.744 15.545l6.327-3.544-6.327-3.546v7.09z"
+      fill="#fff"
+    />
   </svg>
-  <svg class="max-ytsm:hidden" width="80" height="24" fill="none">
-    <ellipse cx="12.18" cy="12" rx="12.18" ry="12" fill="red" />
+  <svg
+    class="max-ytsm:hidden"
+    width="80"
+    height="24"
+    fill="none"
+  >
+    <ellipse
+      cx="12.18"
+      cy="12"
+      rx="12.18"
+      ry="12"
+      fill="red"
+    />
     <ellipse
       cx="12.18"
       cy="12"

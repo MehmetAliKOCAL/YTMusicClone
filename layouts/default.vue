@@ -1,66 +1,66 @@
 <script setup>
-let randomBg = Math.ceil(Math.random() * 7);
-let previousBg = [randomBg, randomBg, randomBg];
+  let randomBg = Math.ceil(Math.random() * 7);
+  let previousBg = [randomBg, randomBg, randomBg];
 
-function changeBgImage() {
-  randomBg = Math.ceil(Math.random() * 7);
-  if (previousBg.includes(randomBg)) {
-    changeBgImage();
-  } else {
-    previousBg.shift();
-    previousBg.push(randomBg);
+  function changeBgImage() {
+    randomBg = Math.ceil(Math.random() * 7);
+    if (previousBg.includes(randomBg)) {
+      changeBgImage();
+    } else {
+      previousBg.shift();
+      previousBg.push(randomBg);
+    }
   }
-}
 
-watch(useRoute(), () => {
-  if (useRoute().path === "/") changeBgImage();
-});
+  watch(useRoute(), () => {
+    if (useRoute().path === '/') changeBgImage();
+  });
 
-function categories() {
-  if (useRoute().path === "/library") {
-    return [
-      {
-        name: "Playlists",
-        link: "/",
-      },
-      {
-        name: "Songs",
-        link: "/",
-      },
-      {
-        name: "Albums",
-        link: "/",
-      },
-      {
-        name: "Artists",
-        link: "/",
-      },
-    ];
-  } else {
-    return [
-      {
-        name: "Relax",
-        link: "/relax",
-      },
-      {
-        name: "Energize",
-        link: "/energize",
-      },
-      {
-        name: "Focus",
-        link: "/focus",
-      },
-      {
-        name: "Workout",
-        link: "/workout",
-      },
-      {
-        name: "Commute",
-        link: "/commute",
-      },
-    ];
+  function categories() {
+    if (useRoute().path === '/library') {
+      return [
+        {
+          name: 'Playlists',
+          link: '/',
+        },
+        {
+          name: 'Songs',
+          link: '/',
+        },
+        {
+          name: 'Albums',
+          link: '/',
+        },
+        {
+          name: 'Artists',
+          link: '/',
+        },
+      ];
+    } else {
+      return [
+        {
+          name: 'Relax',
+          link: '/relax',
+        },
+        {
+          name: 'Energize',
+          link: '/energize',
+        },
+        {
+          name: 'Focus',
+          link: '/focus',
+        },
+        {
+          name: 'Workout',
+          link: '/workout',
+        },
+        {
+          name: 'Commute',
+          link: '/commute',
+        },
+      ];
+    }
   }
-}
 </script>
 
 <template>
@@ -86,7 +86,10 @@ function categories() {
       />
     </div>
     <Header class="relative z-20" />
-    <NuxtLoadingIndicator color="red" :height="2" />
+    <NuxtLoadingIndicator
+      color="red"
+      :height="2"
+    />
     <SongSettingsMenu />
     <div
       class="max-ytsm:px-4 max-ytlg:px-14 ytlg:max-w-[1040px] ytxl:max-w-[1255px] yt2xl:max-w-[1470px] mx-auto"
@@ -108,23 +111,23 @@ function categories() {
 </template>
 
 <style>
-@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+  @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
 
-::-webkit-scrollbar {
-  width: 12px;
-  background-color: rgb(27, 27, 27);
-  border-left: 1px rgb(50, 50, 50) solid;
-}
+  ::-webkit-scrollbar {
+    width: 12px;
+    background-color: rgb(27, 27, 27);
+    border-left: 1px rgb(50, 50, 50) solid;
+  }
 
-::-webkit-scrollbar-thumb {
-  background-color: rgb(90, 90, 90);
-}
+  ::-webkit-scrollbar-thumb {
+    background-color: rgb(90, 90, 90);
+  }
 
-::-webkit-scrollbar-thumb:hover {
-  background-color: rgb(110, 110, 110);
-}
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: rgb(110, 110, 110);
+  }
 
-body {
-  background-color: rgb(3, 3, 3);
-}
+  body {
+    background-color: rgb(3, 3, 3);
+  }
 </style>
