@@ -1,9 +1,8 @@
 import ytsr from 'ytsr';
 
 export default defineEventHandler(async (event) => {
-  const searchQuery = getQuery(event);
-
-  return await ytsr(decodeURIComponent(searchQuery.query), {
-    limit: searchQuery.limit,
-  });
+  const { searchQuery, limit } = getQuery(event);
+  const findAvailableFilters = await ytsr.getFilters(searchQuery);
+  const { url } = findAvailableFilters.get('Type').get('Video');
+  return await ytsr(url, { limit });
 });

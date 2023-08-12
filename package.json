@@ -22,6 +22,6 @@
     "@pinia/nuxt": "^0.4.9",
     "@vueuse/components": "^10.1.0",
     "v-wave": "^1.5.0",
-    "ytsr": "^3.8.2"
+    "ytsr": "^3.8.4"
   }
 }
