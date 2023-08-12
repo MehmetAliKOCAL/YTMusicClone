@@ -4,7 +4,7 @@
   const elementBeingHovered = ref(null);
   const query = useRoute().params.query;
   let tabSelected = ref(0);
-  let searchResult = ref(await $fetch(`/api/search?query=${query}&limit=20`));
+  let searchResult = ref(await $fetch(`/api/search?searchQuery=${query}&limit=20`));
 
   function playSong(image, title, explicit, artists, id) {
     globalVariables.$patch({
@@ -49,9 +49,7 @@
 </script>
 <template>
   <main class="mx-auto max-w-[850px]">
-    <div
-      class="flex text-white text-sm font-bold space-x-8 border-b border-white/10"
-    >
+    <div class="flex text-white text-sm font-bold space-x-8 border-b border-white/10">
       <button
         v-for="tab in tabs"
         :key="tab"
@@ -100,7 +98,7 @@
                   result?.id
                 )
               "
-              class="relative cursor-pointer rounded-[4px] overflow-hidden"
+              class="w-[100px] relative cursor-pointer rounded-[4px] overflow-hidden"
             >
               <img
                 :src="result?.bestThumbnail?.url"
@@ -110,9 +108,7 @@
               <div
                 class="z-10 top-0 w-full h-full absolute flex justify-center items-center bg-black/70 transition-all duration-200"
                 :class="[
-                  elementBeingHovered === result
-                    ? 'opacity-100 visible'
-                    : 'opacity-0 invisible',
+                  elementBeingHovered === result ? 'opacity-100 visible' : 'opacity-0 invisible',
                 ]"
               >
                 <IconsPlay wrapperElementClassList="w-8" />
@@ -122,9 +118,8 @@
               <p class="text-2xl font-bold truncate">{{ result?.title }}</p>
               <div class="flex space-x-1 text-white/70">
                 <p class="truncate">
-                  {{ result?.type.at(0).toUpperCase() + result?.type.slice(1) }}
+                  {{ `${result?.type.capitalize()} • ` }}
                 </p>
-                <p>•</p>
                 <p class="hover:underline cursor-pointer">
                   {{ result?.author?.name }}
                 </p>
@@ -136,10 +131,6 @@
           v-if="result !== searchResult?.items[0]"
           class="mt-96"
         >
-          <p class="mb-10">
-            bu sayfanın tasarımı henüz hazır değil ve bu yazının altında kalan
-            arama sonuçlarını şimdilik oynatamazsın ;-(
-          </p>
           <p>{{ result?.type }}</p>
           <p>{{ result?.title }}</p>
           <p>{{ result?.id }}</p>

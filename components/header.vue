@@ -4,13 +4,24 @@
 
   let searchResult = ref(null);
   const query = ref(encodeURIComponent(''));
+
+  function debounce(func, timeout = 200) {
+    let timer;
+    return (...args) => {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        func.apply(this, args);
+      }, timeout);
+    };
+  }
+  const debouncedSearch = debounce(() => search());
   async function search() {
-    const response = await $fetch(`/api/search?query=${query.value}&limit=7`);
+    const response = await $fetch(`/api/search?searchQuery=${query.value}&limit=7`);
     searchResult.value = response;
   }
 
   watch(query, () => {
-    search();
+    debouncedSearch();
   });
 
   const elementThatBeingHovered = ref('');
@@ -102,8 +113,7 @@
   onMounted(() => {
     if (process.client) {
       function resizeSettingsMenuScrollBox() {
-        settingsMenuScrollBox.value.style.maxHeight =
-          window.innerHeight - 130 + 'px';
+        settingsMenuScrollBox.value.style.maxHeight = window.innerHeight - 130 + 'px';
       }
 
       function repositionSettingsMenu() {
@@ -348,7 +358,7 @@
           </div>
 
           <div
-            v-if="searchResult !== null && show"
+            v-if="searchResult !== null && showSearch"
             class="py-2"
           >
             <NuxtLink
