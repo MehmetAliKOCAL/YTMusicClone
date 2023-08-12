@@ -61,6 +61,10 @@
       ];
     }
   }
+
+  String.prototype.capitalize = function () {
+    return this.at(0).toUpperCase() + this.slice(1);
+  };
 </script>
 
 <template>
@@ -68,11 +72,7 @@
     <div class="absolute w-full h-full -z-10">
       <div
         class="transition-all duration-1000"
-        :class="[
-          useRoute().path === '/'
-            ? 'opacity-100 visible'
-            : 'opacity-0 invisible',
-        ]"
+        :class="[useRoute().path === '/' ? 'opacity-100 visible' : 'opacity-0 invisible']"
       >
         <ImageRenderer
           :src="`/images/gradient/${randomBg}.jpg`"
@@ -81,9 +81,7 @@
           wrapperElementClassList="min-w-full h-1/2 absolute overflow-hidden flex items-center justify-center"
         />
       </div>
-      <div
-        class="absolute min-w-full h-1/2 bg-gradient-to-b from-ytblack/60 to-ytblack"
-      />
+      <div class="absolute min-w-full h-1/2 bg-gradient-to-b from-ytblack/60 to-ytblack" />
     </div>
     <Header class="relative z-20" />
     <NuxtLoadingIndicator
@@ -93,11 +91,7 @@
     <SongSettingsMenu />
     <div
       class="max-ytsm:px-4 max-ytlg:px-14 ytlg:max-w-[1040px] ytxl:max-w-[1255px] yt2xl:max-w-[1470px] mx-auto"
-      :class="[
-        useRoute().path.slice(1, 7) !== 'search'
-          ? 'mt-6 ytmd:mt-8 yt3xl:mt-10'
-          : 'mt-4',
-      ]"
+      :class="[useRoute().path.slice(1, 7) !== 'search' ? 'mt-6 ytmd:mt-8 yt3xl:mt-10' : 'mt-4']"
     >
       <Categories
         v-if="useRoute().path.slice(1, 7) !== 'search'"
