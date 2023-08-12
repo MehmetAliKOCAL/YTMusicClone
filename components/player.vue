@@ -161,9 +161,7 @@
 <template>
   <div
     class="w-full h-[72px] fixed bottom-0 text-white bg-[#202120] transform transition-all duration-300"
-    :class="[
-      !currentlyPlayingSong.hasOwnProperty('title') ? 'translate-y-[80px]' : '',
-    ]"
+    :class="[!currentlyPlayingSong.hasOwnProperty('title') ? 'translate-y-[80px]' : '']"
   >
     <div
       id="youtube-player"
@@ -191,9 +189,7 @@
           class="-mt-0.5 w-full h-[2px] absolute appearance-none cursor-pointer outline-none bg-transparent"
           :style="`background:linear-gradient(to right, red ${songPlayingProgress?.value}%, transparent ${songPlayingProgress?.value}%)`"
           :class="[
-            elementBeingHovered === 'progressBar'
-              ? 'correctedSliderThumb'
-              : 'defaultSliderThumb',
+            elementBeingHovered === 'progressBar' ? 'correctedSliderThumb' : 'defaultSliderThumb',
           ]"
         />
       </div>
@@ -267,10 +263,7 @@
               class="mr-1 hover:underline text-white/70"
             >
               <p>
-                {{
-                  artist.name +
-                  (artist !== currentlyPlayingSong?.artists.at(-1) ? ',' : '')
-                }}
+                {{ artist.name + (artist !== currentlyPlayingSong?.artists.at(-1) ? ',' : '') }}
               </p>
             </NuxtLink>
           </div>
@@ -282,11 +275,7 @@
           @mouseenter="elementBeingHovered = 'sound'"
           @mouseleave="elementBeingHovered = null"
           class="px-4 h-full flex bg-[#202120] items-center justify-center space-x-6 transition-all duration-200"
-          :class="[
-            elementBeingHovered === 'sound'
-              ? 'opacity-100 visible'
-              : 'opacity-0 invisible',
-          ]"
+          :class="[elementBeingHovered === 'sound' ? 'opacity-100 visible' : 'opacity-0 invisible']"
         >
           <input
             @input="changeSongVolume(songVolume)"
